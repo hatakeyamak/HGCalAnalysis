@@ -96,9 +96,9 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 100
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_Tree_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_Event_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_GenParticles_cfi")
-#process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HBHERecHits_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HBHERecHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCRecHits_cfi")
-#process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCSimHits_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCSimHits_cfi")
 
 process.load("Validation.HGCalValidation.hgcalHitValidation_cfi")
 
@@ -115,10 +115,10 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic', '')
 process.tuple_step = cms.Sequence(
     # Make HCAL tuples: Event, run, ls number
     process.hgcalTupleEvent*
-    #process.hgcalTupleHBHERecHits*
+    process.hgcalTupleHBHERecHits*
     process.hgcalTupleHGCRecHits*
     process.hgcalTupleGenParticles*
-    #process.hgcalTupleHGCSimHits*
+    process.hgcalTupleHGCSimHits*
     process.hgcalTupleTree
 )
 

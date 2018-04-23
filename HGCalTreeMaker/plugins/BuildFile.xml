@@ -3,7 +3,7 @@
   <use   name="FWCore/PluginManager"/>
   <use   name="FWCore/ParameterSet"/>
   <use   name="CommonTools/UtilAlgos"/>
-  <use   name="HcalPromptAnalysis/HcalTreeMaker"/>
+  <use   name="HGCalAnalysis/HGCalTreeMaker"/>
   <use   name="CalibFormats/HcalObjects"/>
   <use   name="CalibCalorimetry/HcalAlgos"/>
   <use   name="DataFormats/Common"/>
