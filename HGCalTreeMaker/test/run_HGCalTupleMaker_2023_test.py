@@ -32,16 +32,16 @@ options.register ('skipEvents', 0, VarParsing.VarParsing.multiplicity.singleton,
 #options.outputFile = 'results_pt15.root'
 #
 # pt=25 GeV sample *relval*
-options.inputFiles = '/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/2637F672-C7A6-E711-B4EF-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/3C00B396-CBA6-E711-95E1-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/60FC86A0-CDA6-E711-960D-0025905B856E.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/E0E29FFF-C6A6-E711-93A0-003048FFCC16.root'
-options.outputFile = 'results_pt25.root'
+#options.inputFiles = '/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/2637F672-C7A6-E711-B4EF-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/3C00B396-CBA6-E711-95E1-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/60FC86A0-CDA6-E711-960D-0025905B856E.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/E0E29FFF-C6A6-E711-93A0-003048FFCC16.root'
+#options.outputFile = 'results_pt25.root'
 #
 # pt=50 GeV sample
 #options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt50Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/00000/B2807A02-50AD-E711-AF78-F01FAFDB45B7.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt50Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/1AB4309F-BAAE-E711-87BC-A0369FC5D904.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt50Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/1AE8206E-E1AD-E711-98C0-FA163E191258.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt50Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/20F00603-FEAD-E711-83F8-0090FAA59EE4.root'
 #options.outputFile = 'results_pt50.root'
 #
 # pt=100 GeV sample
-#options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/BE82B842-31AE-E711-9EA4-0026B94DBDA2.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/E20ADE15-A5AE-E711-9434-0023AEEEB55F.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/FC41ACC6-2FAE-E711-B431-F04DA2747854.root'
-#options.outputFile = 'results_pt100.root'
+options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/BE82B842-31AE-E711-9EA4-0026B94DBDA2.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/E20ADE15-A5AE-E711-9434-0023AEEEB55F.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt100Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/FC41ACC6-2FAE-E711-B431-F04DA2747854.root'
+options.outputFile = 'results_pt100.root'
 #
 #'/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/2637F672-C7A6-E711-B4EF-0025905A612A.root'
 options.maxEvents = -1 # -1 means all events
@@ -54,6 +54,7 @@ options.parseArguments()
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(options.inputFiles),
+    secondaryFileNames = cms.untracked.vstring(options.secondaryInputFiles),
     skipEvents = cms.untracked.uint32(options.skipEvents) # default is 0.
 )
 
@@ -120,7 +121,7 @@ process.tuple_step = cms.Sequence(
     process.hgcalTupleHBHERecHits*
     process.hgcalTupleHGCRecHits*
     process.hgcalTupleGenParticles*
-    process.hgcalTupleHGCSimHits*
+    #process.hgcalTupleHGCSimHits*
     process.hgcalTupleSimTracks*
     process.hgcalTupleGeneralTracks*
     process.hgcalTupleTree
