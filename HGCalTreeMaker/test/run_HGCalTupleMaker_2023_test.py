@@ -100,6 +100,7 @@ process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HBHERecHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCRecHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCSimHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_SimTracks_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_RecoTracks_cfi")
 
 process.load("Validation.HGCalValidation.hgcalHitValidation_cfi")
 
@@ -121,6 +122,7 @@ process.tuple_step = cms.Sequence(
     process.hgcalTupleGenParticles*
     process.hgcalTupleHGCSimHits*
     process.hgcalTupleSimTracks*
+    process.hgcalTupleGeneralTracks*
     process.hgcalTupleTree
 )
 

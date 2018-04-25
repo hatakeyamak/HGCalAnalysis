@@ -8,6 +8,7 @@
 #include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_HGCRecHits.h"
 #include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_HGCSimHits.h"
 #include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_SimTracks.h"
+#include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_RecoTracks.h"
 
 DEFINE_FWK_MODULE(HGCalTupleMaker_Tree);
 DEFINE_FWK_MODULE(HGCalTupleMaker_Event);
@@ -18,3 +19,4 @@ DEFINE_FWK_MODULE(HGCalTupleMaker_HFRecHits);
 DEFINE_FWK_MODULE(HGCalTupleMaker_HGCRecHits);
 DEFINE_FWK_MODULE(HGCalTupleMaker_HGCSimHits);
 DEFINE_FWK_MODULE(HGCalTupleMaker_SimTracks);
+DEFINE_FWK_MODULE(HGCalTupleMaker_RecoTracks);

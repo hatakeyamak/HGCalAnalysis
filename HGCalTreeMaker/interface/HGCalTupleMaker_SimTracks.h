@@ -59,7 +59,7 @@ class HGCalTupleMaker_SimTracks : public edm::EDProducer {
     const edm::SimTrackContainer& trks = *(simTracks.product());
     edm::SimTrackContainer::const_iterator trksiter;
 
-    //std::cout << "SimTrack Size: " << trks.size() << std::endl;
+    if (debug) std::cout << "SimTrack Size: " << trks.size() << std::endl;
 
     for (trksiter = trks.begin(); trksiter != trks.end(); trksiter++){ 
 
@@ -67,7 +67,7 @@ class HGCalTupleMaker_SimTracks : public edm::EDProducer {
       double simEta=trksiter->momentum().eta();
       double simPhi=trksiter->momentum().phi();
 
-      //std::cout << "SimTrack pt, eta, phi: " << simPt << " " << simEta << " " << simPhi << std::endl;
+      if (debug) std::cout << "SimTrack pt, eta, phi: " << simPt << " " << simEta << " " << simPhi << std::endl;
     
       v_pt     -> push_back ( simPt );
       v_eta    -> push_back ( simEta );
