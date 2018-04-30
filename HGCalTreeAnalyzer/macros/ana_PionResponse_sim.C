@@ -144,6 +144,8 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
     TTreeReaderArray<float> SimTracksEta = {fReader, "SimTracksEta"};
     TTreeReaderArray<float> SimTracksPhi = {fReader, "SimTracksPhi"};
     TTreeReaderArray<float> SimTracksPt = {fReader, "SimTracksPt"};
+    TTreeReaderArray<float> SimTracksR = {fReader, "SimTracksR"};
+    TTreeReaderArray<float> SimTracksZ = {fReader, "SimTracksZ"};
     TTreeReaderArray<int> GenParPdgId = {fReader, "GenParPdgId"};
     TTreeReaderArray<int> GenParStatus = {fReader, "GenParStatus"};
     TTreeReaderArray<int> GeneralTracksNValidHits = {fReader, "GeneralTracksNValidHits"};
@@ -159,17 +161,23 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
     // TTreeReaderArray<int> HGCSimHitsIndex = {fReader, "HGCSimHitsIndex"};
     // TTreeReaderArray<int> HGCSimHitsLayer = {fReader, "HGCSimHitsLayer"};
     // TTreeReaderArray<int> HGCSimHitsSubdet = {fReader, "HGCSimHitsSubdet"};
+    TTreeReaderArray<int> SimTracksCharge = {fReader, "SimTracksCharge"};
+    TTreeReaderArray<int> SimTracksPID = {fReader, "SimTracksPID"};
     TTreeReaderValue<UInt_t> bx = {fReader, "bx"};
     TTreeReaderValue<UInt_t> event = {fReader, "event"};
     TTreeReaderValue<UInt_t> ls = {fReader, "ls"};
     TTreeReaderValue<UInt_t> orbit = {fReader, "orbit"};
     TTreeReaderValue<UInt_t> run = {fReader, "run"};
     
+    //
+    // --- Define histograms to fill
     // 
     TH1F *h_RecHitEtGenPt = new TH1F("h_RecHitEtGenPt","h_RecHitEtGenPt",100,0.,2.);
-
     // only when # of simtracks = 2
-    TH1F *h_RecHitEtGenPt_simtrk = new TH1F("h_RecHitEtGenPt_simtrk","h_RecHitEtGenPt_simtrk",100,0.,2.);
+    TH1F *h_RecHitEtGenPt_simtrk  = new TH1F("h_RecHitEtGenPt_simtrk","h_RecHitEtGenPt_simtrk",100,0.,2.);
+    TH1F *h_RecHitEtGenPt_simtrk2 = new TH1F("h_RecHitEtGenPt_simtrk2","h_RecHitEtGenPt_simtrk2",100,0.,2.);
+    
+    TH2F *h_SimTrack_RZ = new TH2F("h_SimTrack_RZ","h_SimTrack_RZ",2000,-1000.,1000.,500,0.,500.);
 
     //
     // Loop over entries
@@ -178,10 +186,9 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
     //nentries = 20000; // FIXME 
     cout << "[Pion Response analyzer] The number of entries is: " << nentries << endl;
 
+    //
     // main event loop
-    //for(unsigned int ievent = 0; ievent<nentries; ievent++) 
-    //{
-    //ch->GetEntry(ievent); 
+    //
     int ievent=0;
     while (fReader.Next()) {
   
@@ -192,7 +199,16 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
 
       //std::cout << *event << std::endl;
 	
+      // Loop over Simtracks
+      int Nsimtrk_tracker=0;
+      for (int irc = 0, nrc =  SimTracksR.GetSize(); irc < nrc; ++irc) {
+	h_SimTrack_RZ->Fill(SimTracksZ[irc],SimTracksR[irc]);
+	if (fabs(SimTracksZ[irc])<300. && SimTracksR[irc]<115.) Nsimtrk_tracker++;
+      }
+
+      //
       // Loop over pions
+      //
       for (int iGenPar = 0, nGenPar =  GenParPt.GetSize(); iGenPar < nGenPar; ++iGenPar) {
 	//std::cout << GenParPdgId[iGenPar] << std::endl;
 	TLorentzVector TLVPion; TLVPion.SetPtEtaPhiM(GenParPt[iGenPar],GenParEta[iGenPar],GenParPhi[iGenPar],GenParM[iGenPar]);
@@ -211,6 +227,20 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
 	//std::cout << SumEt/TLVPion.Pt() <<std::endl;
 	h_RecHitEtGenPt->Fill( SumEt/TLVPion.Pt());
 	if (SimTracksPt.GetSize()==2) h_RecHitEtGenPt_simtrk->Fill( SumEt/TLVPion.Pt());
+	if (Nsimtrk_tracker==2)       h_RecHitEtGenPt_simtrk2->Fill( SumEt/TLVPion.Pt());
+
+	//
+	bool debug=false;
+	if (debug && SumEt/TLVPion.Pt()<0.1){
+	  printf("Low response SumEt=%8.2f, Gen Pion Pt=%8.2f\n",SumEt,TLVPion.Pt());
+	  for (int irc = 0, nrc =  SimTracksR.GetSize(); irc < nrc; ++irc) {
+	    printf("Simtrack Pt=%8.2f,Eta=%8.2f,R=%8.2f,Z=%8.2f,PID=%6d\n",
+		   SimTracksPt[irc],SimTracksEta[irc],
+		   SimTracksR[irc],SimTracksZ[irc],SimTracksPID[irc]
+		   );
+	  }	  
+	} // very low response
+
       } // Loop over pions ends	
 
     }   // Event loop ends
@@ -223,6 +253,9 @@ void HGCALResponseCheckRun(TString rootfile="../HGCalNtuples_239995_Viktor.root"
     h_RecHitEtGenPt->Write();
     h_RecHitEtGenPt_simtrk->Fit("gaus");
     h_RecHitEtGenPt_simtrk->Write();
+    h_RecHitEtGenPt_simtrk2->Fit("gaus");
+    h_RecHitEtGenPt_simtrk2->Write();
+    h_SimTrack_RZ->Write();
 
     file_out.ls();
     file_out.Close();
