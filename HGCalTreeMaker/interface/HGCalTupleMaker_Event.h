@@ -11,6 +11,8 @@ class HGCalTupleMaker_Event : public edm::EDProducer {
  private:
   void produce( edm::Event &, const edm::EventSetup & );
 
+  bool debug=false;
+  
 };
 
 #endif

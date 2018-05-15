@@ -1,6 +1,7 @@
 #include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_Event.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Common/interface/EventBase.h"
+#include <iostream>
 
 HGCalTupleMaker_Event::HGCalTupleMaker_Event(const edm::ParameterSet& iConfig) {
   produces <unsigned int> ( "run"    );
@@ -27,4 +28,6 @@ produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   iEvent.put(move( bx   ), "bx"    );
   iEvent.put(move( orbit), "orbit" );
 
+  if (debug) std::cout << "HGCalTupleMaker_Event" << std::endl;
+  
 }
