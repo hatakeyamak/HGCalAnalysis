@@ -1,8 +1,14 @@
 
-## HGCAL tuple maker (normal mode)
+## HGCAL tuple maker 
 
+### Normal mode
 ```
 cmsRun run_HGCalTupleMaker_2023.py
+```
+
+### Full(?) content mode ()
+```
+cmsRun run_HGCalTupleMaker_2023_full.py
 ```
 
 ## HGCAL sequence:
