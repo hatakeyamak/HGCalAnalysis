@@ -50,7 +50,7 @@ options.outputFile = 'step3_pt25.root'
 #
 #'/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/2637F672-C7A6-E711-B4EF-0025905A612A.root'
 options.maxEvents = -1 # -1 means all events
-#options.skipEvents = 0 # default is 0.
+options.skipEvents = 0 # default is 0.
 
 #------------------------------------------------------------------------------------
 # Get and parse the command line arguments
