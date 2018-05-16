@@ -206,11 +206,12 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     produces<std::vector<float> > ( m_prefix + "Eta"    + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Phi"    + m_suffix );
     produces<std::vector<int>   > ( m_prefix + "Layer"  + m_suffix );
+    produces<std::vector<uint16_t > > ( m_prefix + "ADC" + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Charge" + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Posx"   + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Posy"   + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Posz"   + m_suffix );
-    produces<std::vector<int>   > ( m_prefix + "Index" + m_suffix );
+    produces<std::vector<int>   > ( m_prefix + "Index"  + m_suffix );
     //produces<std::vector<int>   > ( m_prefix + "Flags"  + m_suffix );
     //produces<std::vector<int>   > ( m_prefix + "Aux"    + m_suffix );
     //produces<std::vector<float> > ( m_prefix + "Time"   + m_suffix );
@@ -302,8 +303,8 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     iEvent.put( move(v_eta    ), m_prefix + "Eta"    + m_suffix );
     iEvent.put( move(v_phi    ), m_prefix + "Phi"    + m_suffix );
     iEvent.put( move(v_layer  ), m_prefix + "Layer"  + m_suffix );
-    iEvent.put( move(v_charge ), m_prefix + "Charge" + m_suffix );
     iEvent.put( move(v_adc    ), m_prefix + "ADC"    + m_suffix );
+    iEvent.put( move(v_charge ), m_prefix + "Charge" + m_suffix );
     iEvent.put( move(v_posx   ), m_prefix + "Posx"   + m_suffix );
     iEvent.put( move(v_posy   ), m_prefix + "Posy"   + m_suffix );
     iEvent.put( move(v_posz   ), m_prefix + "Posz"   + m_suffix );
