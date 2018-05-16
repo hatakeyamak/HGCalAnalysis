@@ -20,8 +20,8 @@ options.register ('skipEvents', 0, VarParsing.VarParsing.multiplicity.singleton,
 # /SinglePiPt*Eta1p6_2p8/PhaseIITDRFall17*93X_upgrade2023_realistic_v2*/GEN-SIM-RECO
 #
 # pt=5 GeV sample
-options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt5Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/00000/18D5CC99-22AA-E711-8020-90B11C08CDC7.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt5Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/00000/B8AEECCD-22AA-E711-82FF-1866DA7F8E98.root'
-options.outputFile = 'results_pt5.root'
+#options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt5Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/00000/18D5CC99-22AA-E711-8020-90B11C08CDC7.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt5Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/00000/B8AEECCD-22AA-E711-82FF-1866DA7F8E98.root'
+#options.outputFile = 'results_pt5.root'
 #
 # pt=10 GeV sample
 #options.inputFiles = '/store/mc/PhaseIITDRFall17DR/SinglePiPt10Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/0844EA3B-14A9-E711-9F1D-44A842CFD633.root','/store/mc/PhaseIITDRFall17DR/SinglePiPt10Eta1p6_2p8/GEN-SIM-RECO/noPUFEVT_93X_upgrade2023_realistic_v2-v1/150000/8CF1BCF2-3AA9-E711-B0BE-A4BF0112BD74.root'
@@ -100,22 +100,13 @@ process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_Event_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_GenParticles_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HBHERecHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCRecHits_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCUncalibratedRecHits_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCDigis_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCSimHits_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_SimTracks_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_RecoTracks_cfi")
 
 process.load("Validation.HGCalValidation.hgcalHitValidation_cfi")
-
-#-----
-# Additional collections
-#-----
-process.hgcalTupleHGCUncalibRecHits = process.hgcalTupleHGCRecHits.clone()
-process.hgcalTupleHGCUncalibRecHits.Prefix = cms.untracked.string('HGCUncalibRecHit')
-process.hgcalTupleHGCUncalibRecHits.source = cms.untracked.VInputTag(
-    cms.untracked.InputTag("HGCalRecHit","HGCEEUncalibRecHits"),
-    cms.untracked.InputTag("HGCalRecHit","HGCHEFUncalibRecHits"),
-    cms.untracked.InputTag("HGCalRecHit","HGCHEBUncalibRecHits")
-)
 
 #------------------------------------------------------------------------------------
 # Specify Global Tag
@@ -132,7 +123,8 @@ process.tuple_step = cms.Sequence(
     process.hgcalTupleEvent*
     process.hgcalTupleHBHERecHits*
     process.hgcalTupleHGCRecHits*
-    process.hgcalTupleHGCUncalibRecHits*
+    process.hgcalTupleHGCDigis*
+    process.hgcalTupleHGCUncalibratedRecHits*
     process.hgcalTupleGenParticles*
     process.hgcalTupleHGCSimHits*
     process.hgcalTupleSimTracks*
