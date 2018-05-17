@@ -33,7 +33,7 @@ options.register ('skipEvents', 0, VarParsing.VarParsing.multiplicity.singleton,
 #
 # pt=25 GeV sample *relval*
 #options.inputFiles = '/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/2637F672-C7A6-E711-B4EF-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/3C00B396-CBA6-E711-95E1-0025905A612A.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/60FC86A0-CDA6-E711-960D-0025905B856E.root','/store/relval/CMSSW_9_3_2/RelValSinglePiPt25Eta1p7_2p7/GEN-SIM-RECO/93X_upgrade2023_realistic_v2_2023D17noPU-v1/10000/E0E29FFF-C6A6-E711-93A0-003048FFCC16.root'
-options.inputFiles = '/store/user/hatake/HGCAL/fulreco/step3_pt25.root','/store/user/hatake/HGCAL/fulreco/step3_pt25001.root','/store/user/hatake/HGCAL/fulreco/step3_pt202.root'
+options.inputFiles = 'root://kodiak-se.baylor.edu//store/user/hatake/HGCAL/fulreco/step3_pt25.root','root://kodiak-se.baylor.edu//store/user/hatake/HGCAL/fulreco/step3_pt25001.root','root://kodiak-se.baylor.edu//store/user/hatake/HGCAL/fulreco/step3_pt202.root'
 options.outputFile = 'ntuples_digi_pt25.root'
 #
 # pt=50 GeV sample

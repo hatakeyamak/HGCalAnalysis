@@ -116,6 +116,13 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	  double     charge    = adc*gain;
 	  fill(detId, geom0, index, layer, adc, charge);	  
 
+	  if (debug){
+	  for (int i=0; i< 10; i++){
+	    HGCSample  hgcSampleTmp = it->sample(i);	    
+	    printf("EE isample: %6d, adc: %8d (%8d)\n",i,hgcSampleTmp.data(),adc);
+	  }
+	  }
+	  
 	}
 
       }
@@ -136,13 +143,21 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	for(auto it = heDigis->begin(); it != heDigis->end(); ++it) {
 	  //worker_->run1(evt, it, *heUncalibRechits);
 
-	   HGCHEDetId detId     = (it->id());
-	   int        layer     = detId.layer();
-	   HGCSample  hgcSample = it->sample(SampleIndx);
-	   uint16_t   gain      = hgcSample.toa();
-	   uint16_t   adc       = hgcSample.data();
-	   double     charge    = adc*gain;
-	   fill(detId, geom0, index, layer, adc, charge);
+	  HGCHEDetId detId     = (it->id());
+	  int        layer     = detId.layer();
+	  HGCSample  hgcSample = it->sample(SampleIndx);
+	  uint16_t   gain      = hgcSample.toa();
+	  uint16_t   adc       = hgcSample.data();
+	  double     charge    = adc*gain;
+	  fill(detId, geom0, index, layer, adc, charge);
+	  
+	  if (debug){
+	  for (int i=0; i< 10; i++){
+	    HGCSample  hgcSampleTmp = it->sample(i);	    
+	    printf("HE isample: %6d, adc: %8d (%8d)\n",i,hgcSampleTmp.data(),adc);
+	  }
+	  }
+	  
 	}
 
       }
@@ -170,6 +185,14 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	  uint16_t   adc       = hgcSample.data();
 	  double     charge    = adc*gain;
 	  fill(detId, geom0, index, layer, adc, charge);
+
+	  if (debug){
+	  for (int i=0; i< 10; i++){
+	    HGCSample  hgcSampleTmp = it->sample(i);	    
+	    printf("BH isample: %6d, adc: %8d (%8d)\n",i,hgcSampleTmp.data(),adc);
+	  }
+	  }
+	  
 	}
 
       }
@@ -197,7 +220,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     m_geometrySource (iConfig.getUntrackedParameter<std::vector<std::string> >("geometrySource")),
     m_prefix         (iConfig.getUntrackedParameter<std::string>  ("Prefix")),
     m_suffix         (iConfig.getUntrackedParameter<std::string>  ("Suffix")),
-    SampleIndx       (iConfig.getUntrackedParameter<int>("SampleIndx",5)) {
+    SampleIndx       (iConfig.getUntrackedParameter<int>("SampleIndx",2)) {
     
     m_HGCEEDigisToken = consumes<HGCEEDigiCollection>(m_HGCDigisTags[0]);
     m_HGCHEDigisToken = consumes<HGCHEDigiCollection>(m_HGCDigisTags[1]);
@@ -216,7 +239,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     //produces<std::vector<int>   > ( m_prefix + "Aux"    + m_suffix );
     //produces<std::vector<float> > ( m_prefix + "Time"   + m_suffix );
   }
-
+  
   std::unique_ptr<std::vector<float> > v_eta;
   std::unique_ptr<std::vector<float> > v_phi;
   std::unique_ptr<std::vector<int  > > v_layer;
