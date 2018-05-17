@@ -45,7 +45,7 @@ edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<
 ADC (16 bits)  
 charge (fC? TBC)  
 HEBack:  
-keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(add noise)->chargeColl[i]
+keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(add noise)->chargeColl[i]->ADC 
 
 ### RecHits (uncalib):
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitProducer.cc
@@ -58,8 +58,8 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEFUncalibRecHits"   "RECO"    
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEBUncalibRecHits"   "RECO"    
 ```
-CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIPs?)
-BH:        ADC * adcLSB                          -> amplitude (charge in fC?)
+CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIPs?)  
+BH:        ADC * adcLSB                          -> amplitude (charge in fC?)  
 adcLSB=0.10, fC/MIP=1.25 (or 2.57 for some layers) for HGCEE & HGCHEF  
 adcLSB=0.25 for HGCHEB  
 
