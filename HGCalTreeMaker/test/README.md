@@ -71,6 +71,7 @@ adcLSB=0.25 for HGCHEB
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/python/HGCalRecHit_cfi.py
 * Additional:
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalRecHitWorkerSimple.cc
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecAlgos/interface/HGCalRecHitSimpleAlgo.h
 ```
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCEERecHits"    "RECO"    
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCHEFRecHits"   "RECO"    
