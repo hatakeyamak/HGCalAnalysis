@@ -32,6 +32,8 @@ vector<PCaloHit>                      "g4SimHits"                 "HcalHits"    
 ### Digis:
 * https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCDigitizer.cc
 * https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/python/hgcalDigitizer_cfi.py
+* Additional:
+* HGCHEBack: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCHEbackDigitizer.cc
 ```
 HGCDigisEE
 HGCDigisHEfront
@@ -40,12 +42,15 @@ edm::SortedCollection<HGCDataFrame<HGCalDetId,HGCSample>,edm::StrictWeakOrdering
 edm::SortedCollection<HGCDataFrame<HGCalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HGCalDetId,HGCSample> > >    "mix"                       "HGCDigisHEfront"   "HLT"     
 edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HcalDetId,HGCSample> > >    "mix"                       "HGCDigisHEback"   "HLT"     
 ```
-ADC (16 bits)
-charge (fC? TBC)
+ADC (16 bits)  
+charge (fC? TBC)  
+HEBack:  
+keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(add noise)->chargeColl[i]
 
 ### RecHits (uncalib):
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitProducer.cc
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/python/HGCalUncalibRecHit_cfi.py
+* Additional:
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitWorkerWeights.cc
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecAlgos/interface/HGCalUncalibRecHitRecWeightsAlgo.h
 ```
@@ -53,8 +58,9 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEFUncalibRecHits"   "RECO"    
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEBUncalibRecHits"   "RECO"    
 ```
-ADC * adcLSB = amplitude (unit?)  
-adcLSB=0.10 for HGCEE & HGCHEF  
+CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIPs?)
+BH:        ADC * adcLSB                          -> amplitude (charge in fC?)
+adcLSB=0.10, fC/MIP=1.25 (or 2.57 for some layers) for HGCEE & HGCHEF  
 adcLSB=0.25 for HGCHEB  
 
 ### RedHits (calib):
