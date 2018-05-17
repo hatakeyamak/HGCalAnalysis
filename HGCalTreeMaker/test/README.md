@@ -53,7 +53,9 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEFUncalibRecHits"   "RECO"    
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEBUncalibRecHits"   "RECO"    
 ```
-amplitude (unit?)
+ADC * adcLSB = amplitude (unit?)  
+adcLSB=0.10 for HGCEE & HGCHEF  
+adcLSB=0.25 for HGCHEB  
 
 ### RedHits (calib):
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalRecHitProducer.cc
