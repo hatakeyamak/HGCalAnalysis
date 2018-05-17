@@ -30,8 +30,8 @@ vector<PCaloHit>                      "g4SimHits"                 "HcalHits"    
 ```
 
 ### Digis:
-* https://github.com/cms-sw/cmssw/blob/master/SimCalorimetry/HGCalSimProducers/src/HGCDigitizer.cc
-* https://github.com/cms-sw/cmssw/blob/master/SimCalorimetry/HGCalSimProducers/python/hgcalDigitizer_cfi.py
+* https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCDigitizer.cc
+* https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/python/hgcalDigitizer_cfi.py
 ```
 HGCDigisEE
 HGCDigisHEfront
@@ -44,8 +44,10 @@ ADC (16 bits)
 charge (fC? TBC)
 
 ### RecHits (uncalib):
-* https://github.com/cms-sw/cmssw/blob/master/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitProducer.cc
-* https://github.com/cms-sw/cmssw/blob/master/RecoLocalCalo/HGCalRecProducers/python/HGCalUncalibRecHit_cfi.py
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitProducer.cc
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/python/HGCalUncalibRecHit_cfi.py
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitWorkerWeights.cc
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecAlgos/interface/HGCalUncalibRecHitRecWeightsAlgo.h
 ```
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCEEUncalibRecHits"   "RECO"    
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEFUncalibRecHits"   "RECO"    
@@ -54,8 +56,8 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 amplitude (unit?)
 
 ### RedHits (calib):
-* https://github.com/cms-sw/cmssw/blob/master/RecoLocalCalo/HGCalRecProducers/plugins/HGCalRecHitProducer.cc
-* https://github.com/cms-sw/cmssw/blob/master/RecoLocalCalo/HGCalRecProducers/python/HGCalRecHit_cfi.py
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalRecHitProducer.cc
+* https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/python/HGCalRecHit_cfi.py
 ```
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCEERecHits"    "RECO"    
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCHEFRecHits"   "RECO"    
