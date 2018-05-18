@@ -77,5 +77,9 @@ edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRe
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCHEFRecHits"   "RECO"    
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCHEBRecHits"   "RECO"    
 ```
+```
+uncalibRH.amplitude() * weights_[layer](dEdx) * 0.001 (MeV->GeV)  
+ rcorr_[thickness] (0.88, 0.92, or 1) * cce_correction --> energy (GeV)
+```
 energy (GeV)
 
