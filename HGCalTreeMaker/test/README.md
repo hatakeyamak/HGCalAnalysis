@@ -34,8 +34,9 @@ vector<PCaloHit>                      "g4SimHits"                 "HcalHits"    
 * https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/python/hgcalDigitizer_cfi.py
 * Additional:
 * HGCEE: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCEEDigitizer.cc
-* HGCEE: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCFEElectronics.cc
 * HGCHEFront: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCHEfrontDigitizer.cc
+* HGC Si digitizer base: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCDigitizerBase.cc
+* HGC FE electronics for Si: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCFEElectronics.cc
 * HGCHEBack: https://cmssdt.cern.ch/lxr/source/SimCalorimetry/HGCalSimProducers/src/HGCHEbackDigitizer.cc
 ```
 HGCDigisEE
