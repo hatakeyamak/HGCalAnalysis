@@ -47,7 +47,6 @@ edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<
 ```
 ```
 ADC (16 bits? 12 bits? 10 bits?)
-
 HEFront:
 
 HEBack:  
@@ -67,8 +66,8 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEBUncalibRecHits"   "RECO"    
 ```
 ```
-CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIPs?)  
-BH:        ADC * adcLSB                          -> amplitude (# of MIPs?)  
+CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIP equivalent)  
+BH:        ADC * adcLSB                          -> amplitude (# of MIP equivalent)  
 adcLSB=0.10, fC/MIP=1.25 (or 2.57 or 3.88 for some layers) for HGCEE & HGCHEF  
 adcLSB=0.25 for HGCHEB  
 ```
@@ -85,7 +84,7 @@ edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRe
 edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRecHit"               "HGCHEBRecHits"   "RECO"    
 ```
 ```
-uncalibRH.amplitude() * weights_[layer](dEdx, MeV) * 0.001 (MeV->GeV)  
+uncalibRH.amplitude() * weights_[layer](dEdx, MeV, corrected for energy loss in passive materials) * 0.001 (MeV->GeV)  
  rcorr_[thickness] (0.88, 0.92, or 1) * cce_correction --> energy (GeV)
 ```
 
