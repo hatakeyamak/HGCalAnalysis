@@ -47,11 +47,12 @@ edm::SortedCollection<HGCDataFrame<HGCalDetId,HGCSample>,edm::StrictWeakOrdering
 edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HcalDetId,HGCSample> > >    "mix"                       "HGCDigisHEback"   "HLT"     
 ```
 ```
+Silicon part utilizes HGCFEElectronics::runShaperWithToT
+Scinti part utilizes HGCFEElectronics::runTrivialShaper
 ADC (16 bits? 12 bits? 10 bits?)
 HEFront:
-
 HEBack:  
-keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(noise added)->chargeColl[i](MIPs)->ADC 
+keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(noise added)->chargeColl[i](MIPs)[]->ADC 
 ```
 
 ### RecHits (uncalib):
