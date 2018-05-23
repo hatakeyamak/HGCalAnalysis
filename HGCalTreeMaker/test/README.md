@@ -49,14 +49,14 @@ edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<
 ```
 Silicon part utilizes HGCFEElectronics::runShaperWithToT
 Scinti part utilizes HGCFEElectronics::runTrivialShaper
-<!---
-ADC (16 bits? 12 bits? 10 bits?)
---->
 HEFront:
 (in progress...)
 HEBack:  
 keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation?)->MIP->(noise added)->chargeColl[i](MIPs)->ADC 
 ```
+<!---
+ADC (16 bits? 12 bits? 10 bits?)
+--->
 
 ### RecHits (uncalib):
 * https://cmssdt.cern.ch/lxr/source/RecoLocalCalo/HGCalRecProducers/plugins/HGCalUncalibRecHitProducer.cc
