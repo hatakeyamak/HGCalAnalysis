@@ -16,7 +16,7 @@ cmsRun run_HGCalTupleMaker_2023_full.py
 ## HGCAL sequence:
 
 Kevin's March 1, 2018 talk:
-Link: 
+Link: https://indico.cern.ch/event/709595/contributions/2916850/
 
 ### SimHits:
 ```
@@ -49,10 +49,13 @@ edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<
 ```
 Silicon part utilizes HGCFEElectronics::runShaperWithToT
 Scinti part utilizes HGCFEElectronics::runTrivialShaper
+<!---
 ADC (16 bits? 12 bits? 10 bits?)
+--->
 HEFront:
+(in progress...)
 HEBack:  
-keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation)->MIP->(noise added)->chargeColl[i](MIPs)[]->ADC 
+keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation?)->MIP->(noise added)->chargeColl[i](MIPs)->ADC 
 ```
 
 ### RecHits (uncalib):
@@ -68,9 +71,9 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibratedRecHit> >    "HGCalUncalibRecHit"        "HGCHEBUncalibRecHits"   "RECO"    
 ```
 ```
-CEE & HEF: ADC * adcLSB / fCPerMIP_[thickness-1] -> amplitude (# of MIP equivalent)  
-BH:        ADC * adcLSB                          -> amplitude (# of MIP equivalent)  
-adcLSB=0.10, fC/MIP=1.25 (or 2.57 or 3.88 for some layers) for HGCEE & HGCHEF  
+CEE & HEF: ADC * adcLSB (fC/ADC) / fCPerMIP_[thickness-1] -> amplitude (# of MIP equivalent)  
+BH:        ADC * adcLSB (MIP/ADC)                         -> amplitude (# of MIP equivalent)  
+adcLSB=0.10, fC/MIP=1.25, 2.57, 3.88 (120, 200, 300 um Si sensors)  for HGCEE & HGCHEF  
 adcLSB=0.25 for HGCHEB  
 ```
 
@@ -87,6 +90,6 @@ edm::SortedCollection<HGCRecHit,edm::StrictWeakOrdering<HGCRecHit> >    "HGCalRe
 ```
 ```
 uncalibRH.amplitude() * weights_[layer](dEdx, MeV, corrected for energy loss in passive materials) * 0.001 (MeV->GeV)  
- rcorr_[thickness] (0.88, 0.92, or 1) * cce_correction --> energy (GeV)
+ rcorr_[thickness] (0.88, 0.92, or 1) * cce_correction (GeV)
 ```
 
