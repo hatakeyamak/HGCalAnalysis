@@ -52,7 +52,7 @@ Scinti part utilizes HGCFEElectronics::runTrivialShaper
 HEFront:
 (in progress...)
 HEBack:  
-keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation?)->MIP->(noise added)->chargeColl[i](MIPs)->ADC 
+keV->MIP->#p.e.(poisson smeared)->(xtalk&saturation?)->MIP->(noise added)->chargeColl[i](MIPs)->ADC (10bit)
 ```
 <!---
 ADC (16 bits? 12 bits? 10 bits?)
@@ -73,7 +73,7 @@ edm::SortedCollection<HGCUncalibratedRecHit,edm::StrictWeakOrdering<HGCUncalibra
 ```
 CEE & HEF: ADC * adcLSB (fC/ADC) / fCPerMIP_[thickness-1] -> amplitude (# of MIP equivalent)  
 BH:        ADC * adcLSB (MIP/ADC)                         -> amplitude (# of MIP equivalent)  
-adcLSB=0.10, fC/MIP=1.25, 2.57, 3.88 (120, 200, 300 um Si sensors)  for HGCEE & HGCHEF  
+adcLSB=0.10, fC/MIP=1.25, 2.57, 3.88 (120, 200, 300 um Si sensors)  for HGCEE & HGCHEF
 adcLSB=0.25 for HGCHEB  
 ```
 
