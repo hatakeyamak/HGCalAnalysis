@@ -14,4 +14,3 @@ hgcalTupleHGCRecHits = cms.EDProducer("HGCalTupleMaker_HGCRecHits",
   Prefix = cms.untracked.string  ("HGCRecHit"),
   Suffix = cms.untracked.string  ("")
 )
-
