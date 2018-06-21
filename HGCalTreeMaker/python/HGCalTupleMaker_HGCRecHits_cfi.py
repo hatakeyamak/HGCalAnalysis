@@ -9,7 +9,7 @@ hgcalTupleHGCRecHits = cms.EDProducer("HGCalTupleMaker_HGCRecHits",
   geometrySource = cms.untracked.vstring(
         'HGCalEESensitive',
         'HGCalHESiliconSensitive',
-        'HCal'
+        'HGCalHEScintillatorSensitive'
   ),
   Prefix = cms.untracked.string  ("HGCRecHit"),
   Suffix = cms.untracked.string  ("")

@@ -76,6 +76,7 @@ class HGCalTupleMaker_HGCRecHits : public edm::EDProducer {
       std::string nameDetector_ = m_geometrySource[index];
       if (debug) std::cout << nameDetector_ << std::endl;
 
+      // HCal's geometry
       if (nameDetector_ == "HCal") {
 
 	edm::ESHandle<CaloGeometry> geom;
@@ -97,6 +98,7 @@ class HGCalTupleMaker_HGCRecHits : public edm::EDProducer {
 	}
 
       } else {
+      // HGCal's geometry
 
 	edm::ESHandle<HGCalGeometry> geom;
 	iSetup.get<IdealGeometryRecord>().get(nameDetector_, geom);
@@ -106,12 +108,19 @@ class HGCalTupleMaker_HGCRecHits : public edm::EDProducer {
 	  return;	
 	}
 	const HGCalGeometry* geom0 = geom.product();
-
+	HGCalGeometryMode::GeometryMode mode = geom0->topology().geomMode();
+	int geomType = (((mode == HGCalGeometryMode::Hexagon8) ||
+			 (mode == HGCalGeometryMode::Hexagon8Full)) ? 1 :
+			((mode == HGCalGeometryMode::Trapezoid) ? 2 : 0));
+	
 	for (const auto & it : *(HGCRecHits.product())) {
 	  
 	  DetId detId = it.id();
-	  int ilayer   = HGCalDetId(detId).layer();
-
+	  //KH int ilayer   = HGCalDetId(detId).layer();
+	  int ilayer   = ((geomType == 0) ? HGCalDetId(detId).layer() :
+			 ((geomType == 1) ? HGCSiliconDetId(detId).layer() :
+			  HGCScintillatorDetId(detId).layer()));	  
+	  
 	  run(detId, ilayer, index, geom0, &it);
 
 	}
