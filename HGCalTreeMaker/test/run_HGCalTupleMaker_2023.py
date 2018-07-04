@@ -122,7 +122,7 @@ process.tuple_step = cms.Sequence(
     process.hgcalTupleHBHERecHits*
     process.hgcalTupleHGCRecHits*
     process.hgcalTupleGenParticles*
-    #process.hgcalTupleHGCSimHits*
+    process.hgcalTupleHGCSimHits*
     process.hgcalTupleSimTracks*
     process.hgcalTupleGeneralTracks*
     process.hgcalTupleTree

@@ -14,6 +14,8 @@
 #include "DataFormats/HGCDigi/interface/HGCDigiCollections.h"
 #include "DataFormats/HcalDigi/interface/HBHEDataFrame.h"
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
+#include "DataFormats/ForwardDetId/interface/HGCEEDetId.h"
+#include "DataFormats/ForwardDetId/interface/HGCHEDetId.h"
 
 // Geometry
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
@@ -33,6 +35,7 @@
 #include "Geometry/HcalCommonData/interface/HcalDDDRecConstants.h"
 
 #include "DataFormats/HcalDetId/interface/HcalTestNumbering.h"
+
 
 #include "Geometry/HcalCommonData/interface/HcalHitRelabeller.h"
 

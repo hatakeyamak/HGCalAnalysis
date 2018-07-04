@@ -3,6 +3,7 @@
 <use   name="FWCore/ParameterSet"/>
 <use   name="DataFormats/HcalDigi"/>
 <use   name="DataFormats/HcalRecHit"/>
+<use   name="DataFormats/ForwardDetId"/>
 <use   name="HLTrigger/HLTcore"/>
 <use   name="CondFormats/HcalObjects"/>
 <use   name="Geometry/HcalTowerAlgo"/>

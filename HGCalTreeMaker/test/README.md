@@ -4,7 +4,7 @@
 ### Normal mode
 ```
 cmsRun run_HGCalTupleMaker_2023.py
-cmsRun run_HGCalTupleMaker_2023.py inputFiles='file:../../../24034.0_TTbar_14TeV+TTbar_14TeV_TuneCUETP8M1_2023D28_GenSimHLBeamSpotFull14+DigiFullTrigger_2023D28+RecoFullGlobal_2023D28+HARVESTFullGlobal_2023D28_org/step3.root'
+cmsRun run_HGCalTupleMaker_2023.py inputFiles='file:../../../24034.0_TTbar_14TeV+TTbar_14TeV_TuneCUETP8M1_2023D28_GenSimHLBeamSpotFull14+DigiFullTrigger_2023D28+RecoFullGlobal_2023D28+HARVESTFullGlobal_2023D28/step3.root' outputFile='ntuples_TTbar.root'
 ```
 
 ### Full(?) content mode (including uncalibrated rechits, digis)

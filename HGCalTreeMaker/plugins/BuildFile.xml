@@ -9,6 +9,7 @@
   <use   name="DataFormats/Common"/>
   <use   name="DataFormats/EcalRecHit"/>
   <use   name="DataFormats/HcalDetId"/>
+  <use   name="DataFormats/ForwardDetId"/>
   <use   name="DataFormats/HcalDigi"/>
   <use   name="DataFormats/HcalRecHit"/>
   <use   name="DataFormats/FEDRawData"/>
