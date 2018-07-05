@@ -107,6 +107,7 @@ process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_SimTracks_cfi")
 process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_RecoTracks_cfi")
 
 process.load("Validation.HGCalValidation.hgcalHitValidation_cfi")
+process.load("Validation.HGCalValidation.digiValidation_cff")
 
 #------------------------------------------------------------------------------------
 # Specify Global Tag
@@ -137,6 +138,9 @@ process.tuple_step = cms.Sequence(
 # Path and EndPath definitions
 #-----------------------------------------------------------------------------------
 process.preparation = cms.Path(
-    #process.hgcalHitValidation*
+    process.hgcalHitValidation*
+    process.hgcalDigiValidationEE*
+    process.hgcalDigiValidationHEF*
+    #process.hgcalDigiValidationHEB*
     process.tuple_step
 )

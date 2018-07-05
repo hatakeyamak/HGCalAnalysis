@@ -9,7 +9,10 @@ cmsRun run_HGCalTupleMaker_2023.py inputFiles='file:../../../24034.0_TTbar_14TeV
 
 ### Full(?) content mode (including uncalibrated rechits, digis)
 ```
+# run step3 with cmsDriver.py xxxx ... --outputCommands 'keep *_HGCalUncalibRecHit_*_*','keep *_HGCDigis*_*_*','keep *_hgcalDigis*_*_*'
+# and then
 cmsRun run_HGCalTupleMaker_2023_full.py
+cmsRun run_HGCalTupleMaker_2023_full.py inputFiles='file:../../../24034.0_run1/step3.root' secondaryInputFiles='file:../../../24034.0_run1/step2.root' outputFile='ntuples_full_TTbar.root' >& log_full.log &
 ```
 
 - - - -
@@ -27,7 +30,7 @@ HcalHits
 vector<PCaloHit>                      "g4SimHits"                 "HGCHitsEE"       "SIM"     
 vector<PCaloHit>                      "g4SimHits"                 "HGCHitsHEfront"   "SIM"     
 vector<PCaloHit>                      "g4SimHits"                 "HGCHitsHEback"   "SIM"     
-vector<PCaloHit>                      "g4SimHits"                 "HcalHits"        "SIM"
+#vector<PCaloHit>                      "g4SimHits"                 "HcalHits"        "SIM"
 ```
 
 ### Digis:
@@ -43,9 +46,13 @@ vector<PCaloHit>                      "g4SimHits"                 "HcalHits"    
 HGCDigisEE
 HGCDigisHEfront
 HGCDigisHEback
-edm::SortedCollection<HGCDataFrame<HGCalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HGCalDetId,HGCSample> > >    "mix"                       "HGCDigisEE"      "HLT"     
-edm::SortedCollection<HGCDataFrame<HGCalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HGCalDetId,HGCSample> > >    "mix"                       "HGCDigisHEfront"   "HLT"     
-edm::SortedCollection<HGCDataFrame<HcalDetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<HcalDetId,HGCSample> > >    "mix"                       "HGCDigisHEback"   "HLT"     
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "mix"                       "HGCDigisEE"      "HLT"     
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "mix"                       "HGCDigisHEback"   "HLT"     
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "mix"                       "HGCDigisHEfront"   "HLT" 
+and
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "hgcalDigis"                "EE"              "RECO"    
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "hgcalDigis"                "HEback"          "RECO"    
+edm::SortedCollection<HGCDataFrame<DetId,HGCSample>,edm::StrictWeakOrdering<HGCDataFrame<DetId,HGCSample> > >    "hgcalDigis"                "HEfront"         "RECO"    
 ```
 ```
 Silicon part utilizes HGCFEElectronics::runShaperWithToT

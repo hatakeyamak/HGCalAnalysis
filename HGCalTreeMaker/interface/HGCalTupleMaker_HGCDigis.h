@@ -16,6 +16,7 @@
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
 #include "DataFormats/ForwardDetId/interface/HGCEEDetId.h"
 #include "DataFormats/ForwardDetId/interface/HGCHEDetId.h"
+#include "DataFormats/DetId/interface/DetId.h"
 
 // Geometry
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
@@ -48,9 +49,9 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 
   std::vector<edm::InputTag> m_HGCDigisTags;
 
-  edm::EDGetTokenT<HGCEEDigiCollection> m_HGCEEDigisToken;
-  edm::EDGetTokenT<HGCHEDigiCollection> m_HGCHEDigisToken;
-  edm::EDGetTokenT<HGCBHDigiCollection> m_HGCBHDigisToken;
+  edm::EDGetTokenT<HGCalDigiCollection> m_HGCEEDigisToken;
+  edm::EDGetTokenT<HGCalDigiCollection> m_HGCHEDigisToken;
+  edm::EDGetTokenT<HGCalDigiCollection> m_HGCBHDigisToken;
 
   std::vector<std::string> m_geometrySource;
 
@@ -80,10 +81,12 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     // edm::Handles
     //-----------------------------------------------------
     
-    edm::Handle<HGCEEDigiCollection> HGCEEDigis;
-    edm::Handle<HGCHEDigiCollection> HGCHEDigis;
-    edm::Handle<HGCBHDigiCollection> HGCBHDigis;
+    edm::Handle<HGCalDigiCollection> HGCEEDigis;
+    edm::Handle<HGCalDigiCollection> HGCHEDigis;
+    edm::Handle<HGCalDigiCollection> HGCBHDigis;
 
+    int geomType(0);
+    
     // Loop over input tags
     for( typename std::vector<edm::InputTag>::const_iterator
 	   tag = m_HGCDigisTags.begin(); tag != m_HGCDigisTags.end(); ++tag ) {
@@ -106,13 +109,22 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     	}
     	const HGCalGeometry* geom0 = geom.product();
 
+	geomType=0;
+	HGCalGeometryMode::GeometryMode mode = geom0->topology().geomMode();
+	if ((mode == HGCalGeometryMode::Hexagon8) ||
+	    (mode == HGCalGeometryMode::Hexagon8Full)) geomType = 1;
+	else if (mode == HGCalGeometryMode::Trapezoid) geomType = 2;
+	
 	iEvent.getByToken(m_HGCEEDigisToken, HGCEEDigis);
-	const HGCEEDigiCollection* eeDigis = HGCEEDigis.product(); // get a ptr to the product
+	const HGCalDigiCollection* eeDigis = HGCEEDigis.product(); // get a ptr to the product
 	for(auto it = eeDigis->begin(); it != eeDigis->end(); ++it) {
 	  //worker_->run1(evt, it, *eeUncalibRechits);
 	  
-	  HGCEEDetId detId     = (it->id());
-	  int        layer     = detId.layer();
+	  //KH HGCEEDetId detId     = (it->id());
+	  //KH int        layer     = detId.layer();
+	  DetId      detId     = it->id();
+	  int        layer     = ((geomType == 0) ? HGCalDetId(detId).layer() :
+				  HGCSiliconDetId(detId).layer());
 	  HGCSample  hgcSample = it->sample(SampleIndx);
 	  uint16_t   gain      = hgcSample.toa();
 	  uint16_t   adc       = hgcSample.data();
@@ -141,13 +153,76 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     	}
     	const HGCalGeometry* geom0 = geom.product();
 
+	geomType=0;
+	HGCalGeometryMode::GeometryMode mode = geom0->topology().geomMode();
+	if ((mode == HGCalGeometryMode::Hexagon8) ||
+	    (mode == HGCalGeometryMode::Hexagon8Full)) geomType = 1;
+	else if (mode == HGCalGeometryMode::Trapezoid) geomType = 2;
+
+	std::cout << nameDetector_ << " " << geomType << std::endl;
+
+	HGCHEDigis.clear();
 	iEvent.getByToken(m_HGCHEDigisToken, HGCHEDigis);
-	const HGCHEDigiCollection* heDigis = HGCHEDigis.product(); // get a ptr to the product
+	
+	const HGCalDigiCollection* heDigis = HGCHEDigis.product(); // get a ptr to the product
 	for(auto it = heDigis->begin(); it != heDigis->end(); ++it) {
 	  //worker_->run1(evt, it, *heUncalibRechits);
 
-	  HGCHEDetId detId     = (it->id());
-	  int        layer     = detId.layer();
+	  //KH HGCHEDetId detId     = (it->id());
+	  //KH int        layer     = detId.layer();
+	  DetId      detId     = it->id();
+	  int        layer     = ((geomType == 0) ? HGCalDetId(detId).layer() :
+				  ((geomType == 1) ? HGCSiliconDetId(detId).layer() :
+				   HGCScintillatorDetId(detId).layer()));
+	  HGCSample  hgcSample = it->sample(SampleIndx);
+	  uint16_t   gain      = hgcSample.toa();
+	  uint16_t   adc       = hgcSample.data();
+	  double     charge    = adc*gain;
+	  fill(detId, geom0, index, layer, adc, charge);
+	  
+	  if (debug){
+	  for (int i=0; i< 10; i++){
+	    HGCSample  hgcSampleTmp = it->sample(i);	    
+	    printf("HE isample: %6d, adc: %8d (%8d)\n",i,hgcSampleTmp.data(),adc);
+	  }
+	  }
+	  
+	}
+
+      }
+      //----------
+      else if (nameDetector_ == "HGCalHEScintillatorSensitive") {
+
+    	edm::ESHandle<HGCalGeometry> geom;
+    	iSetup.get<IdealGeometryRecord>().get(nameDetector_, geom);
+    	if (!geom.isValid()) {
+    	  edm::LogWarning("HGCalTupleMaker_HGCDigis")
+    	    << "Cannot get valid HGCalGeometry Object for " << nameDetector_;
+    	  return;
+    	}
+    	const HGCalGeometry* geom0 = geom.product();
+
+	geomType=0;
+	HGCalGeometryMode::GeometryMode mode = geom0->topology().geomMode();
+	if ((mode == HGCalGeometryMode::Hexagon8) ||
+	    (mode == HGCalGeometryMode::Hexagon8Full)) geomType = 1;
+	else if (mode == HGCalGeometryMode::Trapezoid) geomType = 2;
+
+	std::cout << nameDetector_ << " " << geomType << std::endl;
+
+	HGCBHDigis.clear();
+	iEvent.getByToken(m_HGCBHDigisToken, HGCBHDigis);
+	
+	const HGCalDigiCollection* bhDigis = HGCBHDigis.product(); // get a ptr to the product
+	for(auto it = bhDigis->begin(); it != bhDigis->end(); ++it) {
+	  //worker_->run1(evt, it, *heUncalibRechits);
+
+	  //KH HGCHEDetId detId     = (it->id());
+	  //KH int        layer     = detId.layer();
+	  DetId      detId     = it->id();
+	  int        layer     = ((geomType == 0) ? HGCalDetId(detId).layer() :
+				  ((geomType == 1) ? HGCSiliconDetId(detId).layer() :
+				   HGCScintillatorDetId(detId).layer()));
 	  HGCSample  hgcSample = it->sample(SampleIndx);
 	  uint16_t   gain      = hgcSample.toa();
 	  uint16_t   adc       = hgcSample.data();
@@ -177,11 +252,12 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     	const CaloGeometry* geom0 = geom.product();
 
 	iEvent.getByToken(m_HGCBHDigisToken, HGCBHDigis);
-	const HGCBHDigiCollection* bhDigis = HGCBHDigis.product(); // get a ptr to tbh product
+	const HGCalDigiCollection* bhDigis = HGCBHDigis.product(); // get a ptr to tbh product
 	for(auto it = bhDigis->begin(); it != bhDigis->end(); ++it) {
 	  //worker_->run1(evt, it, *bhUncalibRechits);
 
 	  HcalDetId  detId     = (it->id());
+	  //KH DetId      detId     = it.id();
 	  int        layer     = detId.depth();
 	  HGCSample  hgcSample = it->sample(SampleIndx);
 	  uint16_t   gain      = hgcSample.toa();
@@ -225,9 +301,9 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     m_suffix         (iConfig.getUntrackedParameter<std::string>  ("Suffix")),
     SampleIndx       (iConfig.getUntrackedParameter<int>("SampleIndx",2)) {
     
-    m_HGCEEDigisToken = consumes<HGCEEDigiCollection>(m_HGCDigisTags[0]);
-    m_HGCHEDigisToken = consumes<HGCHEDigiCollection>(m_HGCDigisTags[1]);
-    m_HGCBHDigisToken = consumes<HGCBHDigiCollection>(m_HGCDigisTags[2]);
+    m_HGCEEDigisToken = consumes<HGCalDigiCollection>(m_HGCDigisTags[0]);
+    m_HGCHEDigisToken = consumes<HGCalDigiCollection>(m_HGCDigisTags[1]);
+    m_HGCBHDigisToken = consumes<HGCalDigiCollection>(m_HGCDigisTags[2]);
     
     produces<std::vector<float> > ( m_prefix + "Eta"    + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Phi"    + m_suffix );

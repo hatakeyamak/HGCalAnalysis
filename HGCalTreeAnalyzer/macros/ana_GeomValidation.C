@@ -252,7 +252,7 @@ void bookHistograms(TList *v_hist)
   book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
   sprintf(histo, "Rechits_XY_CEHF");
   book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
-  sprintf(histo, "Rechits_Z_R_CEHB");
+  sprintf(histo, "Rechits_XY_CEHB");
   book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
 
 }

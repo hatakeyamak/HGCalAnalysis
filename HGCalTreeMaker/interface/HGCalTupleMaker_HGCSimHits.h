@@ -221,7 +221,7 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 
 	} else {
 
-	  if (it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
+	  if (debug && it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
 					 << it.energy() << " " 
 					 << nameDetector_ << " " 
 					 << subdet << " " << cell << " " << sector << std::endl;
