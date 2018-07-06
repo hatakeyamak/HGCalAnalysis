@@ -12,7 +12,7 @@ cmsRun run_HGCalTupleMaker_2023.py inputFiles='file:../../../24034.0_TTbar_14TeV
 # run step3 with cmsDriver.py xxxx ... --outputCommands 'keep *_HGCalUncalibRecHit_*_*','keep *_HGCDigis*_*_*','keep *_hgcalDigis*_*_*'
 # and then
 cmsRun run_HGCalTupleMaker_2023_full.py
-cmsRun run_HGCalTupleMaker_2023_full.py inputFiles='file:../../../24034.0_run1/step3.root' secondaryInputFiles='file:../../../24034.0_run1/step2.root' outputFile='ntuples_full_TTbar.root' >& log_full.log &
+cmsRun run_HGCalTupleMaker_2023_full.py inputFiles='file:../../../24034.0_run1/step3.root' outputFile='ntuples_full_TTbar.root' >& log_full.log &
 ```
 
 - - - -

@@ -159,7 +159,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	    (mode == HGCalGeometryMode::Hexagon8Full)) geomType = 1;
 	else if (mode == HGCalGeometryMode::Trapezoid) geomType = 2;
 
-	std::cout << nameDetector_ << " " << geomType << std::endl;
+	//std::cout << nameDetector_ << " " << geomType << std::endl;
 
 	HGCHEDigis.clear();
 	iEvent.getByToken(m_HGCHEDigisToken, HGCHEDigis);
@@ -208,7 +208,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	    (mode == HGCalGeometryMode::Hexagon8Full)) geomType = 1;
 	else if (mode == HGCalGeometryMode::Trapezoid) geomType = 2;
 
-	std::cout << nameDetector_ << " " << geomType << std::endl;
+	//std::cout << nameDetector_ << " " << geomType << std::endl;
 
 	HGCBHDigis.clear();
 	iEvent.getByToken(m_HGCBHDigisToken, HGCBHDigis);
