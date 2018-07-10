@@ -91,6 +91,16 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
       PCaloHits.clear();
 
       //
+      if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: " << hgcCons_[index]->geomMode() << " " << index << std::endl;
+      if (debug) std::cout << " Hexagon8: "     << HGCalGeometryMode::Hexagon8
+		<< " Hexagon8Full: " << HGCalGeometryMode::Hexagon8Full
+		<< " Hexagon: "      << HGCalGeometryMode::Hexagon
+		<< " HexagonFull: "  << HGCalGeometryMode::HexagonFull
+		<< " Square: "       << HGCalGeometryMode::Square
+		<< " Trapezoid: "    << HGCalGeometryMode::Trapezoid
+		<< std::endl;
+
+      //
       // Geometry & looping over rechits
       //                                                                                                              
       std::string nameDetector_ = m_geometrySource[index];
@@ -115,10 +125,10 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
       //
       for (const auto & it : *(PCaloHits.product())) {	  
 
-	int    cell, sector, subsector, layer, zside;
+	int    cell, cell2, type, sector, subsector, layer, zside;
 	int    subdet(0);
 	HepGeom::Point3D<float> gcoord;
-
+	
 	unsigned int id_ = it.id();
 
 	// 
@@ -220,14 +230,19 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	  */
 
 	} else {
-
+	  // HGCAL geometry, not relying on HCAL
+	  
+	  //debug = true;
 	  if (debug && it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
 					 << it.energy() << " " 
 					 << nameDetector_ << " " 
 					 << subdet << " " << cell << " " << sector << std::endl;
 	  
 	  if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: " << hgcCons_[index]->geomMode() << std::endl;
+	  //debug = false;
 
+	  //
+	  // Square
 	  if (hgcCons_[index]->geomMode() == HGCalGeometryMode::Square) {
 
 	    if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: in the square mode." << std::endl;
@@ -244,19 +259,66 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 
 	    if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: in the non-square mode." << std::endl;
 
-	    HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, subsector, cell);
-	    std::pair<float,float> xy = hgcCons_[index]->locateCell(cell,layer,sector,false);
-	    double zp = hgcCons_[index]->waferZ(layer,false);
+	    std::pair<float,float> xy;
+
+	    if ((hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8) ||
+		(hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8Full)) {
+
+	      HGCSiliconDetId detId = HGCSiliconDetId(id_);
+	      subdet           = ForwardEmpty;
+	      cell             = detId.cellU();
+	      cell2            = detId.cellV();
+	      sector           = detId.waferU();
+	      subsector        = detId.waferV();
+	      type             = detId.type();
+	      layer            = detId.layer();
+	      zside            = detId.zside();
+
+	      xy = hgcCons_[index]->locateCell(layer,sector,subsector,cell,cell2,false,true);
+	      
+	    } else if (hgcCons_[index]->geomMode() == HGCalGeometryMode::Trapezoid) {
+
+	      HGCScintillatorDetId detId = HGCScintillatorDetId(id_);
+	      subdet           = ForwardEmpty;
+	      cell             = detId.ietaAbs();
+	      sector           = detId.iphi();
+	      subsector        = 1;
+	      type             = detId.type();
+	      layer            = detId.layer();
+	      zside            = detId.zside();
+
+	      xy = hgcCons_[index]->locateCellTrap(layer,cell,sector,false);
+
+	      if (debug){
+	      double zp = hgcCons_[index]->waferZ(layer,false)/10.; // mm->cm
+	      double xp = (zp<0) ? -xy.first/10 : xy.first/10; //mm
+	      double yp = xy.second/10; //mm	  
+	      std::cout << "HGC geom comparison: "
+				   << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
+				   << std::endl;
+	      }
+	      
+	    } else {
+
+	      HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, type, cell);
+	      xy = hgcCons_[index]->locateCell(cell,layer,sector,false);
+
+	    }
+	    
+	    //HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, subsector, cell);
+	    //std::pair<float,float> xy = hgcCons_[index]->locateCell(cell,layer,sector,false);
+	    double zp = hgcCons_[index]->waferZ(layer,false)/10.; // mm->cm
 	    if (zside < 0) zp = -zp;
 	    float  xp = (zp < 0) ? -xy.first/10 : xy.first/10; // mm->cm
 	    float  yp = xy.second/10; //mm->cm
 	    gcoord = HepGeom::Point3D<float>(xp,yp,zp); // 
-
+	    
 	  }
 
 	  //
 	  // 
 	  //  
+	  /*
 	  HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, subsector, cell);      
 	  // sector: wafer
 	  // subsector: celltype
@@ -273,6 +335,8 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 		  << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
 		  << "(" << gcoord.x() << ", " << gcoord.y() << ", " << gcoord.z() << ") "  
 		  << std::endl;
+
+	  */
 
 	}  // if nameDetector_ 
 
