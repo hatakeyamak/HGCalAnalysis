@@ -104,7 +104,7 @@ void fill1D(TList *v_hist, std::string name, double value);
 void fill2D(TList *v_hist, std::string name, double value, double value2);
 
 //
-void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root", TString outfile="hgcal_histograms.root", int maxevents=-1, int option=2) 
+void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root", TString outfile="hgcal_histograms.root", int maxevents=-1, int skipevents=0, int option=2) 
 { 
 
     cout << "[Pion response analyzer] Running option " << option << " for " << endl; 
@@ -204,9 +204,9 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
     bookHistograms(v_hist); // most of histograms booked here
 
     TH1F *h_RecHitEtGenPt = new TH1F("h_RecHitEtGenPt","h_RecHitEtGenPt",100,0.,2.);
-    TH1F *h_RecHitEtGenPt = new TH1F("h_RecHitEtGenPt","h_RecHitEtGenPt",100,0.,2.);
-    TH1F *h_RecHitEtGenPt = new TH1F("h_RecHitEtGenPt","h_RecHitEtGenPt",100,0.,2.);
-    TH1F *h_RecHitEtGenPt = new TH1F("h_RecHitEtGenPt","h_RecHitEtGenPt",100,0.,2.);
+    TH1F *h_RecHitEtGenPt_Eta1p6_2p0 = new TH1F("h_RecHitEtGenPt_Eta1p6_2p0","h_RecHitEtGenPt_Eta1p6_2p0",100,0.,2.);
+    TH1F *h_RecHitEtGenPt_Eta2p0_2p4 = new TH1F("h_RecHitEtGenPt_Eta2p0_2p4","h_RecHitEtGenPt_Eta2p0_2p4",100,0.,2.);
+    TH1F *h_RecHitEtGenPt_Eta2p4_2p8 = new TH1F("h_RecHitEtGenPt_Eta2p4_2p8","h_RecHitEtGenPt_Eta2p4_2p8",100,0.,2.);
     
     std::string strtmp;
    
@@ -228,7 +228,8 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
       ievent++;
       if(ievent%10==0) cout << "[HGCAL Response analyzer] Processed " << ievent << " out of " << nentries << " events" << endl; 
       if (maxevents>0 && ievent>maxevents) break;
-
+      if (ievent<=skipevents) continue;
+      
       //std::cout << "Simhit size: " << HGCSimHitsEnergy.GetSize() << std::endl;
       //std::cout << "Digi size:   " << HGCDigiADC.GetSize() << std::endl;
       //std::cout << "Rechit size: " << HGCRecHitEnergy.GetSize() << std::endl;
@@ -349,8 +350,9 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
         }
         //std::cout << SumEt/TLVPion.Pt() <<std::endl;
         h_RecHitEtGenPt->Fill( SumEt/TLVPion.Pt());
-        //if (SimTracksPt.GetSize()==2) h_RecHitEtGenPt_simtrk->Fill( SumEt/TLVPion.Pt());
-        //if (Nsimtrk_tracker==2)       h_RecHitEtGenPt_simtrk2->Fill( SumEt/TLVPion.Pt());
+	if      (fabs(TLVPion.Eta())>1.6 && fabs(TLVPion.Eta())<=2.0) h_RecHitEtGenPt_Eta1p6_2p0->Fill( SumEt/TLVPion.Pt());
+	else if (fabs(TLVPion.Eta())>2.0 && fabs(TLVPion.Eta())<=2.4) h_RecHitEtGenPt_Eta2p0_2p4->Fill( SumEt/TLVPion.Pt());
+	else if (fabs(TLVPion.Eta())>2.4 && fabs(TLVPion.Eta())<=2.8) h_RecHitEtGenPt_Eta2p4_2p8->Fill( SumEt/TLVPion.Pt());
       
       }
 	
@@ -360,6 +362,11 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
     TFile file_out(outfile,"RECREATE");
 
     v_hist->Write();
+
+    h_RecHitEtGenPt->Write();
+    h_RecHitEtGenPt_Eta1p6_2p0->Write();
+    h_RecHitEtGenPt_Eta2p0_2p4->Write();
+    h_RecHitEtGenPt_Eta2p4_2p8->Write();
     
     file_out.ls();
     file_out.Close();
@@ -369,9 +376,9 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
 //
 // Main function
 //
-void ana_GeomValidation_v2(TString rootfile="PFGtuples_local/*root",TString outfile="hgcal_histograms.root",int maxevents=-1)
+void ana_GeomValidation_v2(TString rootfile="PFGtuples_local/*root",TString outfile="hgcal_histograms.root",int maxevents=-1,int skipevents=0)
 {
-  HGCALResponseCheckRun(rootfile, outfile, maxevents, 0);
+  HGCALResponseCheckRun(rootfile, outfile, maxevents, skipevents, 0);
 }
 
 //
