@@ -9,8 +9,8 @@ echo "source done"
 #
 # TO BE CHECKED before submission
 #
-setenv MYCMSSW CMSSW_10_2_0_pre6_NewGeom ## <========= TO BE CHECKED
-setenv VERSION v01
+setenv MYCMSSW CMSSW_10_2_0_pre6_NewGeom4 ## <========= TO BE CHECKED
+setenv VERSION v01                        ## <========= TO BE CHECKED
 #
 #
 echo ${MYCMSSW} ${VERSION}
@@ -31,7 +31,7 @@ ls -R
 cd ${MYCMSSW}/src
 scramv1 b ProjectRename
 eval `scramv1 runtime -csh` # cmsenv is an alias not on the workers
-cmsRun ../../run_HGCalTupleMaker_2023_full.py maxEvents=2000 skipEvents=`echo ${1}\*2000|bc`
+cmsRun ../../run_HGCalTupleMaker_2023_full.py maxEvents=2500 skipEvents=`echo ${1}\*2500|bc`
 foreach f (`ls *trees*.root`)
    echo $f
    set name=`basename $f .root`

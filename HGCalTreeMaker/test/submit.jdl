@@ -22,4 +22,5 @@ Output = log/condorjob_$(Cluster)_$(Process).stdout
 Error = log/condorjob_$(Cluster)_$(Process).stdout
 Log = log/condorjob_$(Cluster)_$(Process).log
 Arguments = $(Process)
-Queue 25
+Queue 38
+

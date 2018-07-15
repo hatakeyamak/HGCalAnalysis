@@ -15,7 +15,7 @@ config.JobType.allowUndistributedCMSSW = False
 config.section_("Data")
 # MC example
 config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
-config.Data.inputDataset = '/Step1/hatake-SinglePiPt25Eta1p3_3p0_CMSSW_10_2_0_pre6_NewGeom_v2-f868aff62387668242feed0c9c9e2dc0/USER'
+config.Data.inputDataset = '/SinglePiPt25Eta1p7_2p7/hatake-CMSSW_10_2_0_pre6_NewGeom4_Step1_v1-746715d901ad04d785f010d6b135ba91/USER'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 #KH config.Data.totalUnits = 100
@@ -30,7 +30,7 @@ config.Data.unitsPerJob = 1
 
 config.Data.publication = True
 config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/' # Parameter Data.publishDbsUrl has been renamed to Data.publishDBS
-config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom_Step2_v2' # <== Check!!!
+config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom4_Step2_v1' # <== Check!!!
 
 config.Data.outLFNDirBase = '/store/user/hatake/crab_outputs'  # Data.outLFN has been renamed to Data.outLFNDirBase
 config.Data.ignoreLocality = False

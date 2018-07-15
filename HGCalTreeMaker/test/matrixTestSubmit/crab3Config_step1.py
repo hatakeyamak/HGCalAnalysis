@@ -6,7 +6,7 @@ config.General.requestName = ''
 
 config.section_("JobType")
 config.JobType.pluginName = 'PrivateMC'
-config.JobType.psetName = 'SinglePiPt25Eta1p3_3p0_cfi_GEN_SIM.py' # <== Check!!!
+config.JobType.psetName = 'SinglePiPt25Eta1p7_2p7_cfi_GEN_SIM.py' # <== Check!!!
 #config.JobType.allowNonProductionCMSSW = False 
 config.JobType.allowUndistributedCMSSW = False # Parameter JobType.allowNonProductionCMSSW has been renamed to JobType.allowUndistributedCMSSW
 
@@ -20,10 +20,10 @@ config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
 
 config.Data.publication = True
 config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/' # Parameter Data.publishDbsUrl has been renamed to Data.publishDBS
-config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom_Step1_v2' # <== Check!!!
+config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom4_Step1_v1' # <== Check!!!
 
 config.Data.outLFNDirBase = '/store/user/hatake/crab_outputs'  # Data.outLFN has been renamed to Data.outLFNDirBase
-config.Data.outputPrimaryDataset = 'SinglePiPt25Eta1p3_3p0'
+config.Data.outputPrimaryDataset = 'SinglePiPt25Eta1p7_2p7'
 config.Data.ignoreLocality = True
 
 config.section_("Site")
