@@ -8,14 +8,16 @@ config.General.transferLogs = True
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'step3_RAW2DIGI_L1Reco_RECO_RECOSIM.py'
+config.JobType.psetName = 'step3_RAW2DIGI_L1Reco_RECO_RECOSIM_PAT.py'
 config.JobType.allowUndistributedCMSSW = False
-#config.JobType.outputFiles=['step2.root']
+config.JobType.outputFiles=['step3.root','step3_inMINIAODSIM.root']
+
+config.JobType.maxMemoryMB = 4000
 
 config.section_("Data")
 # MC example
 config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
-config.Data.inputDataset = '/SinglePiPt25Eta1p7_2p7/hatake-CMSSW_10_2_0_pre6_NewGeom4_Step2_v1-aa90e66e6b4e80430216976b2fd6386f/USER'
+config.Data.inputDataset = '/TTbar_14TeV/hatake-CMSSW_10_2_0_Step2_v1-51a6785f969ef726860aa0eeeed3c3da/USER'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 #KH config.Data.totalUnits = 100
@@ -30,10 +32,10 @@ config.Data.unitsPerJob = 1
 
 config.Data.publication = True
 config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/' # Parameter Data.publishDbsUrl has been renamed to Data.publishDBS
-config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom4_Step3_v1' # <== Check!!!
+config.Data.outputDatasetTag = 'CMSSW_10_2_0_Step3_v3' # <== Check!!!
 
 config.Data.outLFNDirBase = '/store/user/hatake/crab_outputs'  # Data.outLFN has been renamed to Data.outLFNDirBase
-config.Data.ignoreLocality = False
+config.Data.ignoreLocality = True
 
 config.section_("Site")
 config.Site.storageSite = 'T3_US_Baylor'

@@ -15,7 +15,7 @@ config.JobType.allowUndistributedCMSSW = False
 config.section_("Data")
 # MC example
 config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
-config.Data.inputDataset = '/SinglePiPt25Eta1p7_2p7/hatake-CMSSW_10_2_0_pre6_NewGeom4_Step1_v1-746715d901ad04d785f010d6b135ba91/USER'
+config.Data.inputDataset = '/TTbar_14TeV/hatake-CMSSW_10_2_0_Step1_v1-94a2b5754b96f1b47dd608ea1ab3b14b/USER'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 #KH config.Data.totalUnits = 100
@@ -30,12 +30,13 @@ config.Data.unitsPerJob = 1
 
 config.Data.publication = True
 config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/' # Parameter Data.publishDbsUrl has been renamed to Data.publishDBS
-config.Data.outputDatasetTag = 'CMSSW_10_2_0_pre6_NewGeom4_Step2_v1' # <== Check!!!
+config.Data.outputDatasetTag = 'CMSSW_10_2_0_Step2_v1' # <== Check!!!
 
 config.Data.outLFNDirBase = '/store/user/hatake/crab_outputs'  # Data.outLFN has been renamed to Data.outLFNDirBase
-config.Data.ignoreLocality = False
+config.Data.ignoreLocality = True
 
 config.section_("Site")
 config.Site.storageSite = 'T3_US_Baylor'
 #KH (this whitelisting below is not really necessary. we can use any T2/T3 for running jobs. we can still send output to Baylor)
 #KH config.Site.whitelist = ['T3_US_Baylor']
+config.Site.whitelist = ['T3_US_Baylor','T2_US_*']
