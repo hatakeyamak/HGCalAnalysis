@@ -148,9 +148,9 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic', '')
 process.FEVTDEBUGHLToutput.outputCommands.append('keep *_HGCalUncalibRecHit_*_*')
 process.FEVTDEBUGHLToutput.outputCommands.append('keep *_HGCDigis*_*_*')
 process.FEVTDEBUGHLToutput.outputCommands.append('keep *_hgcalDigis*_*_*')
-process.MINIAODSIMoutput.outputCommands.append('keep *_HGCalUncalibRecHit_*_*')
-process.MINIAODSIMoutput.outputCommands.append('keep *_HGCDigis*_*_*')
-process.MINIAODSIMoutput.outputCommands.append('keep *_hgcalDigis*_*_*')
+#process.MINIAODSIMoutput.outputCommands.append('keep *_HGCalUncalibRecHit_*_*')
+#process.MINIAODSIMoutput.outputCommands.append('keep *_HGCDigis*_*_*')
+#process.MINIAODSIMoutput.outputCommands.append('keep *_hgcalDigis*_*_*')
 
 # Path and EndPath definitions
 process.raw2digi_step = cms.Path(process.RawToDigi)
