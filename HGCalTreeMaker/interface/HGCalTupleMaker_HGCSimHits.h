@@ -51,6 +51,7 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
   const std::string     m_suffix;
 
   bool debug=false;
+  bool debug_geom=true;
 
   //const HGCalDDDConstants   *hgccons_;
   //const HcalDDDRecConstants *hcalcons_;
@@ -125,7 +126,10 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
       //
       for (const auto & it : *(PCaloHits.product())) {	  
 
-	int    cell, cell2, type, sector, subsector, layer, zside;
+	int    cell, type, sector, subsector, layer, zside;
+	int    cellU=-100, cellV=-100, waferU=-100, waferV=-100;
+	int    ieta=-100, iphi=-100, ietaAbs=-100;
+	
 	int    subdet(0);
 	HepGeom::Point3D<float> gcoord;
 	
@@ -230,7 +234,9 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	  */
 
 	} else {
+	  //
 	  // HGCAL geometry, not relying on HCAL
+	  //
 	  
 	  //debug = true;
 	  if (debug && it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
@@ -243,6 +249,7 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 
 	  //
 	  // Square
+	  //
 	  if (hgcCons_[index]->geomMode() == HGCalGeometryMode::Square) {
 
 	    if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: in the square mode." << std::endl;
@@ -261,34 +268,43 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 
 	    std::pair<float,float> xy;
 
+	    //
+	    // Hexagons
+	    //
 	    if ((hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8) ||
 		(hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8Full)) {
 
 	      HGCSiliconDetId detId = HGCSiliconDetId(id_);
 	      subdet           = ForwardEmpty;
-	      cell             = detId.cellU();
-	      cell2            = detId.cellV();
-	      sector           = detId.waferU();
-	      subsector        = detId.waferV();
+	      cellU            = detId.cellU();
+	      cellV            = detId.cellV();
+	      waferU           = detId.waferU();
+	      waferV           = detId.waferV();
 	      type             = detId.type();
 	      layer            = detId.layer();
 	      zside            = detId.zside();
-
-	      xy = hgcCons_[index]->locateCell(layer,sector,subsector,cell,cell2,false,true);
 	      
+	      xy = hgcCons_[index]->locateCell(layer,waferU,waferV,cellU,cellV,false,true);
+
+	    //
+	    // Trapezoid
+	    //
 	    } else if (hgcCons_[index]->geomMode() == HGCalGeometryMode::Trapezoid) {
 
 	      HGCScintillatorDetId detId = HGCScintillatorDetId(id_);
 	      subdet           = ForwardEmpty;
-	      cell             = detId.ietaAbs();
-	      sector           = detId.iphi();
+	      ietaAbs          = detId.ietaAbs();
+	      iphi             = detId.iphi();
 	      subsector        = 1;
 	      type             = detId.type();
 	      layer            = detId.layer();
 	      zside            = detId.zside();
 
-	      xy = hgcCons_[index]->locateCellTrap(layer,cell,sector,false);
+	      xy = hgcCons_[index]->locateCellTrap(layer,ietaAbs,iphi,false);
 
+	      ieta=ietaAbs;
+	      if (zside<0) ieta=-ietaAbs;
+	      
 	      if (debug){
 	      double zp = hgcCons_[index]->waferZ(layer,false)/10.; // mm->cm
 	      double xp = (zp<0) ? -xy.first/10 : xy.first/10; //mm
@@ -298,15 +314,19 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 				   << std::endl;
 	      }
 	      
+	    //
+	    // Others
+	    //
 	    } else {
 
 	      HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, type, cell);
 	      xy = hgcCons_[index]->locateCell(cell,layer,sector,false);
 
 	    }
-	    
-	    //HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, subsector, cell);
-	    //std::pair<float,float> xy = hgcCons_[index]->locateCell(cell,layer,sector,false);
+
+	    // 
+	    // Flip x for negative z
+	    //
 	    double zp = hgcCons_[index]->waferZ(layer,false)/10.; // mm->cm
 	    if (zside < 0) zp = -zp;
 	    float  xp = (zp < 0) ? -xy.first/10 : xy.first/10; // mm->cm
@@ -315,35 +335,52 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	    
 	  }
 
-	  //
-	  // 
-	  //  
-	  /*
-	  HGCalTestNumbering::unpackHexagonIndex(id_, subdet, zside, layer, sector, subsector, cell);      
-	  // sector: wafer
-	  // subsector: celltype
-	  std::pair<float, float> xy;
-	  std::pair<int,float> layerIdx;
-	  double zp, xp, yp;
-          xy = hgcCons_[index]->locateCell(cell,layer,sector,false); //mm
-          zp = hgcCons_[index]->waferZ(layer,false); //cm 
-          if (zside < 0) zp = -zp;
-          xp = (zp<0) ? -xy.first/10 : xy.first/10; //mm
-          yp = xy.second/10; //mm	  
-
-	  if (debug) std::cout << "HGC geom comparison: "
-		  << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
-		  << "(" << gcoord.x() << ", " << gcoord.y() << ", " << gcoord.z() << ") "  
-		  << std::endl;
-
-	  */
-
 	}  // if nameDetector_ 
 
 	double tof = (gcoord.mag()*CLHEP::mm)/CLHEP::c_light; 
 	
 	v_energy -> push_back ( it.energy() );
 
+	//KH--- 
+	if (debug_geom){
+	  
+	double rout_layer[52]={
+	  1567.5, 1567.5, 1575.6, 1575.6, 1583.7,
+	  1583.7, 1591.8, 1591.8, 1599.9, 1599.9,
+	  1608.0, 1608.0, 1616.1, 1616.1, 1624.2,
+	  1624.2, 1632.2, 1632.2, 1640.4, 1640.4,
+	  1648.5, 1648.5, 1656.6, 1656.6, 1664.7,
+	  1664.7, 1672.8, 1672.8, 1696.9, 1713.5,
+	  1730.1, 1746.7, 1763.3, 1779.9, 1796.4,
+	  1844.2, 1907.6, 1971.0, 2034.5, 2097.9,
+	  2184.6, 2299.8, 2415.0, 2530.2, 2645.3,
+	  2664.0, 2664.0, 2664.0, 2664.0, 2664.0,
+	  2664.0, 2664.0
+	};
+	int layer_index=layer-1;
+	if (index!=0) layer_index=layer+27;
+	
+	if ( fabs(gcoord.getEta()) > 3. || gcoord.perp()>rout_layer[layer_index]/10.+5.) {
+	  if ((hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8) ||
+	      (hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8Full)){
+	    printf("Simhits(Hexagon8) [cellU/V, waferU/V, eta, phil, layer, index, detid]: %4d %4d %4d %4d %6.2f %6.2f %4d %4d ",
+		   cellU,cellV,waferU,waferV,gcoord.getEta(),gcoord.getPhi(),layer,index);
+	    std::cout << id_  << std::endl;
+	    HGCSiliconDetId detId = HGCSiliconDetId(id_);
+	    std::cout << detId << std::endl;
+	  }
+	  else if (hgcCons_[index]->geomMode() == HGCalGeometryMode::Trapezoid){
+	    printf("Simhits(Trapezoid) [ieta, iphi, eta, phi, layer, index, detid]: %4d %4d %6.2f %6.2f %4d %4d ",
+		   ieta,iphi,gcoord.getEta(),gcoord.getPhi(),layer,index);
+	    std::cout << id_  << std::endl;
+	    HGCScintillatorDetId detId = HGCScintillatorDetId(id_);
+	    std::cout << detId << std::endl;
+	  }
+	}
+	
+	} // if debug_geom
+	//KH---
+	
 	if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: " << nameDetector_ << " "
 		  << it.time() << " "
 		  << it.time()-tof << " "

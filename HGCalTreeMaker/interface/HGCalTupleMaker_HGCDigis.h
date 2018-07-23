@@ -61,6 +61,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   int SampleIndx;
   
   bool debug=false;
+  bool debug_geom=true;
 
   //HGC Geometry                                                                                                     
   std::vector<const HGCalDDDConstants*> hgcCons_;
@@ -240,6 +241,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 
       }
       //----------
+      /*
       else if (nameDetector_ == "HCal") {
 
     	edm::ESHandle<CaloGeometry> geom;
@@ -275,6 +277,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
 	}
 
       }
+      */
       //----------
       else {
 
@@ -413,14 +416,71 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     iEvent.put( move(v_index  ), m_prefix + "Index" + m_suffix );
   }  
 
+  //template<class Digi>          void HcalDigisValidation::reco(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::EDGetTokenT<edm::SortedCollection<Digi> > & tok)
+  //template<class dataFrameType> void HcalDigisValidation::reco(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::EDGetTokenT<HcalDataFrameContainer<dataFrameType> > & tok)  
+    
   template<class T1, class T2>
   void fill(const T1& detId, const T2* geom, 
 	    int index, int layer, uint16_t adc, double charge) {
 
+    //KH--- 
+    double rout_layer[52]={
+      1567.5, 1567.5, 1575.6, 1575.6, 1583.7,
+      1583.7, 1591.8, 1591.8, 1599.9, 1599.9,
+      1608.0, 1608.0, 1616.1, 1616.1, 1624.2,
+      1624.2, 1632.2, 1632.2, 1640.4, 1640.4,
+      1648.5, 1648.5, 1656.6, 1656.6, 1664.7,
+      1664.7, 1672.8, 1672.8, 1696.9, 1713.5,
+      1730.1, 1746.7, 1763.3, 1779.9, 1796.4,
+      1844.2, 1907.6, 1971.0, 2034.5, 2097.9,
+      2184.6, 2299.8, 2415.0, 2530.2, 2645.3,
+      2664.0, 2664.0, 2664.0, 2664.0, 2664.0,
+      2664.0, 2664.0
+    };
+    int layer_index=layer-1;
+    if (index!=0) layer_index=layer+27;
+    //KH---
+    
     GlobalPoint global = geom->getPosition(detId);
-
+    
     if (debug) std::cout << layer << " " << global.z() << std::endl;
 
+    //KH----
+    if (debug_geom){
+    HGCalGeometryMode::GeometryMode mode = geom->topology().geomMode();
+
+    int    cellU=-100, cellV=-100, waferU=-100, waferV=-100;
+    int    ieta=-100, iphi=-100, ietaAbs=-100;
+
+    if ( fabs(global.eta()) > 3.01 || global.perp()>rout_layer[layer_index]/10.+5.) {
+      std::cout << "digi eta>3.01 or r>rmax+5cm" << std::endl;
+      if ((mode == HGCalGeometryMode::Hexagon8) ||
+	  (mode == HGCalGeometryMode::Hexagon8Full)){
+	HGCSiliconDetId detId0 = HGCSiliconDetId(detId);
+    	cellU            = detId0.cellU();
+	cellV            = detId0.cellV();
+	waferU           = detId0.waferU();
+	waferV           = detId0.waferV();
+	printf("Digis(Hexagon8) [cellU/V, waferU/V, eta, phil, layer, index]: %4d %4d %4d %4d %6.2f %6.2f %4d %4d\n",
+	       cellU,cellV,waferU,waferV,global.eta(),double(global.phi()),layer,index);
+	//std::cout << detId   << std::endl;
+	std::cout << detId0  << std::endl;
+      }
+      else if (mode == HGCalGeometryMode::Trapezoid){
+	HGCScintillatorDetId detId0 = HGCScintillatorDetId(detId);
+	ietaAbs          = detId0.ietaAbs();
+	ieta             =ietaAbs;
+	if (detId0.zside()<0) ieta=-ietaAbs;
+	iphi             = detId0.iphi();
+	printf("Digis(Trapezoid) [ieta, iphi, eta, phi, r(rmax), layer, index]: %4d %4d %6.2f %6.2f %6.2f ( %6.2f ) %4d %4d\n",
+	       ieta,iphi,global.eta(),double(global.phi()),global.perp(),rout_layer[layer_index]/10.,layer,index);
+	//std::cout << detId   << std::endl;
+	std::cout << detId0  << std::endl;
+      }
+    }
+    } // if debug_geom
+    //KH---
+    
     v_eta    -> push_back ( global.eta() );
     v_phi    -> push_back ( global.phi() );
     v_layer  -> push_back ( layer        );
