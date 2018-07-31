@@ -12,14 +12,14 @@ config.JobType.psetName = 'step3_RAW2DIGI_L1Reco_RECO_RECOSIM_PAT.py'
 config.JobType.allowUndistributedCMSSW = False
 config.JobType.outputFiles=['step3.root','step3_inMINIAODSIM.root']
 
-config.JobType.maxMemoryMB = 4000
+config.JobType.maxMemoryMB = 3000
 
 config.section_("Data")
 # MC example
 config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
 config.Data.inputDataset = '/TTbar_14TeV/hatake-CMSSW_10_2_0_Step2_v1-51a6785f969ef726860aa0eeeed3c3da/USER'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 2
 #KH config.Data.totalUnits = 100
 # MC example ends
 # Data example
@@ -32,7 +32,7 @@ config.Data.unitsPerJob = 1
 
 config.Data.publication = True
 config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/' # Parameter Data.publishDbsUrl has been renamed to Data.publishDBS
-config.Data.outputDatasetTag = 'CMSSW_10_2_0_Step3_v3' # <== Check!!!
+config.Data.outputDatasetTag = 'CMSSW_10_2_0_Step3_v5' # <== Check!!!
 
 config.Data.outLFNDirBase = '/store/user/hatake/crab_outputs'  # Data.outLFN has been renamed to Data.outLFNDirBase
 config.Data.ignoreLocality = True
