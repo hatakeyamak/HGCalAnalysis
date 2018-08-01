@@ -9,6 +9,7 @@ from Configuration.StandardSequences.Eras import eras
 
 #KH
 import FWCore.ParameterSet.VarParsing as VarParsing
+options = VarParsing.VarParsing ('analysis')
 options.register('outputMINIAOD',
                  "file:step3_inMINIAODSIM.root",
                  VarParsing.VarParsing.multiplicity.singleton,

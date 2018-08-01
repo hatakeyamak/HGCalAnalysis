@@ -9,6 +9,7 @@ from Configuration.StandardSequences.Eras import eras
 
 #KH
 import FWCore.ParameterSet.VarParsing as VarParsing
+options = VarParsing.VarParsing ('analysis')
 options.inputFiles = 'file:step2.root'
 options.outputFile = 'file:step3.root'
 options.maxEvents = -1 # -1 means all events
