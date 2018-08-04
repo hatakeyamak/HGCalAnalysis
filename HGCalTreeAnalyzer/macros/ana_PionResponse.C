@@ -16,7 +16,7 @@
 //
 //   $ root -b  
 //   root> .L ana_PionResponse.C++ 
-//   root> ana_PionResponse("../HcalTreeMaker/test/results_pt50.root","hgcal_histograms_pt50.root",-1)
+//   root> ana_PionResponse("results_pt50.root","hgcal_histograms_pt50.root",-1)
 //    
 // -----------------------------------------------------------------------------------
 // 
@@ -91,7 +91,7 @@ const char* GetDetName(int Subdet)
 }
 
 //
-void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", TString outfile="hgcal_histograms.root", int maxevents=-1, int option=2) 
+void HGCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", TString outfile="hgcal_histograms.root", int maxevents=-1, int option=2) 
 { 
 
     cout << "[Pion response analyzer] Running option " << option << " for " << endl; 
@@ -102,7 +102,7 @@ void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", 
     //
     // Get the tree from the PFG ntuple 
     //
-    TChain *ch = new TChain("hcalTupleTree/tree");
+    TChain *ch = new TChain("hgcalTupleTree/tree");
     ch->Add(rootfile);
     printf("%d;\n",ch->GetNtrees());
     printf("%lld;\n",ch->GetEntries());
@@ -138,7 +138,6 @@ void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", 
     TTreeReaderArray<int> HBHERecHitIPhi = {fReader, "HBHERecHitIPhi"};
     TTreeReaderArray<int> HBHERecHitRBXid = {fReader, "HBHERecHitRBXid"};
     TTreeReaderArray<int> HGCRecHitLayer = {fReader, "HGCRecHitLayer"};
-    TTreeReaderArray<int> HGCRecHitSubdet = {fReader, "HGCRecHitSubdet"};
     TTreeReaderValue<UInt_t> bx = {fReader, "bx"};
     TTreeReaderValue<UInt_t> event = {fReader, "event"};
     TTreeReaderValue<UInt_t> ls = {fReader, "ls"};
@@ -164,17 +163,14 @@ void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", 
   
       // Progress indicator 
       ievent++;
-      if(ievent%100==0) cout << "[HCAL Response analyzer] Processed " << ievent << " out of " << nentries << " events" << endl; 
+      if(ievent%100==0) cout << "[HGCAL Response analyzer] Processed " << ievent << " out of " << nentries << " events" << endl; 
       if (maxevents>0 && ievent>maxevents) break;
 
       //std::cout << *event << std::endl;
 	
       // Loop over pions
       for (int iGenPar = 0, nGenPar =  GenParPt.GetSize(); iGenPar < nGenPar; ++iGenPar) {
-	//std::cout << GenParPdgId[iGenPar] << std::endl;
 	TLorentzVector TLVPion; TLVPion.SetPtEtaPhiM(GenParPt[iGenPar],GenParEta[iGenPar],GenParPhi[iGenPar],GenParM[iGenPar]);
-	//TLVPion.Print();
-	//if (fabs(TLVPion.Eta())<1.8 || fabs(TLVPion.Eta())>2.4) continue;
 
 	// Loop over HGCRecHits
 	double SumEt=0.;
@@ -185,7 +181,6 @@ void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", 
 	  double dR=TLVRecHit.DeltaR(TLVPion);
 	  if (dR<0.3) SumEt+=TLVRecHit.Pt();	  
 	}
-	//std::cout << SumEt/TLVPion.Pt() <<std::endl;
 	h_RecHitEtGenPt->Fill( SumEt/TLVPion.Pt());
       } // Loop over pions ends	
 
@@ -208,5 +203,5 @@ void HCALResponseCheckRun(TString rootfile="../HcalNtuples_239995_Viktor.root", 
 //
 void ana_PionResponse(TString rootfile="PFGtuples_local/*root",TString outfile="hgcal_histograms.root",int maxevents=-1)
 {
-  HCALResponseCheckRun(rootfile, outfile, maxevents, 0);
+  HGCALResponseCheckRun(rootfile, outfile, maxevents, 0);
 }
