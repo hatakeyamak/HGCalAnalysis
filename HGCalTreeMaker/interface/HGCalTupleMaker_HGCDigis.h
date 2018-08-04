@@ -62,7 +62,8 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   
   bool debug=false;
   bool debug_geom=true;
-
+  bool detid_store=true;
+  
   //HGC Geometry                                                                                                     
   std::vector<const HGCalDDDConstants*> hgcCons_;
   std::vector<const HGCalGeometry*>     hgcGeometry_;
@@ -310,6 +311,14 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     
     produces<std::vector<float> > ( m_prefix + "Eta"    + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Phi"    + m_suffix );
+    if (detid_store){
+    produces<std::vector<int> >   ( m_prefix + "IEta"   + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "IPhi"   + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "CellU"  + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "CellV"  + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "WaferU" + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "WaferV" + m_suffix );
+    }
     produces<std::vector<int>   > ( m_prefix + "Layer"  + m_suffix );
     produces<std::vector<uint16_t > > ( m_prefix + "ADC" + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Charge" + m_suffix );
@@ -395,6 +404,14 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   void loadAlgo(){
     v_eta    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_phi    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
+    if (detid_store){
+    v_ieta   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_iphi   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_cellu  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_cellv  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_waferu = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_waferv = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    }
     v_layer  = std::unique_ptr<std::vector<int  > > ( new std::vector<int  > ());
     v_adc    = std::unique_ptr<std::vector<uint16_t > > ( new std::vector<uint16_t > ());
     v_charge = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
@@ -407,6 +424,14 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   void dumpAlgo( edm::Event & iEvent ){
     iEvent.put( move(v_eta    ), m_prefix + "Eta"    + m_suffix );
     iEvent.put( move(v_phi    ), m_prefix + "Phi"    + m_suffix );
+    if (detid_store){
+    iEvent.put( move(v_ieta   ), m_prefix + "IEta"   + m_suffix );
+    iEvent.put( move(v_iphi   ), m_prefix + "IPhi"   + m_suffix );
+    iEvent.put( move(v_cellu  ), m_prefix + "CellU"  + m_suffix );
+    iEvent.put( move(v_cellv  ), m_prefix + "CellV"  + m_suffix );
+    iEvent.put( move(v_waferu ), m_prefix + "WaferU" + m_suffix );
+    iEvent.put( move(v_waferv ), m_prefix + "WaferV" + m_suffix );
+    }
     iEvent.put( move(v_layer  ), m_prefix + "Layer"  + m_suffix );
     iEvent.put( move(v_adc    ), m_prefix + "ADC"    + m_suffix );
     iEvent.put( move(v_charge ), m_prefix + "Charge" + m_suffix );
@@ -446,43 +471,56 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
     if (debug) std::cout << layer << " " << global.z() << std::endl;
 
     //KH----
+    bool print_debug_geom=false;
     if (debug_geom){
+      if ( fabs(global.eta()) > 3.01 || global.perp()>rout_layer[layer_index]/10.+5.) {
+	std::cout << "digi eta>3.01 or r>rmax+5cm" << std::endl;
+	print_debug_geom=true;
+      }
+    }
+
     HGCalGeometryMode::GeometryMode mode = geom->topology().geomMode();
 
     int    cellU=-100, cellV=-100, waferU=-100, waferV=-100;
     int    ieta=-100, iphi=-100, ietaAbs=-100;
 
-    if ( fabs(global.eta()) > 3.01 || global.perp()>rout_layer[layer_index]/10.+5.) {
-      std::cout << "digi eta>3.01 or r>rmax+5cm" << std::endl;
-      if ((mode == HGCalGeometryMode::Hexagon8) ||
-	  (mode == HGCalGeometryMode::Hexagon8Full)){
-	HGCSiliconDetId detId0 = HGCSiliconDetId(detId);
-    	cellU            = detId0.cellU();
-	cellV            = detId0.cellV();
-	waferU           = detId0.waferU();
-	waferV           = detId0.waferV();
+    if ((mode == HGCalGeometryMode::Hexagon8) ||
+	(mode == HGCalGeometryMode::Hexagon8Full)){
+      HGCSiliconDetId detId0 = HGCSiliconDetId(detId);
+      cellU            = detId0.cellU();
+      cellV            = detId0.cellV();
+      waferU           = detId0.waferU();
+      waferV           = detId0.waferV();
+      if (print_debug_geom){
 	printf("Digis(Hexagon8) [cellU/V, waferU/V, eta, phil, layer, index]: %4d %4d %4d %4d %6.2f %6.2f %4d %4d\n",
 	       cellU,cellV,waferU,waferV,global.eta(),double(global.phi()),layer,index);
-	//std::cout << detId   << std::endl;
-	std::cout << detId0  << std::endl;
-      }
-      else if (mode == HGCalGeometryMode::Trapezoid){
-	HGCScintillatorDetId detId0 = HGCScintillatorDetId(detId);
-	ietaAbs          = detId0.ietaAbs();
-	ieta             =ietaAbs;
-	if (detId0.zside()<0) ieta=-ietaAbs;
-	iphi             = detId0.iphi();
-	printf("Digis(Trapezoid) [ieta, iphi, eta, phi, r(rmax), layer, index]: %4d %4d %6.2f %6.2f %6.2f ( %6.2f ) %4d %4d\n",
-	       ieta,iphi,global.eta(),double(global.phi()),global.perp(),rout_layer[layer_index]/10.,layer,index);
-	//std::cout << detId   << std::endl;
 	std::cout << detId0  << std::endl;
       }
     }
-    } // if debug_geom
+    else if (mode == HGCalGeometryMode::Trapezoid){
+      HGCScintillatorDetId detId0 = HGCScintillatorDetId(detId);
+      ietaAbs          = detId0.ietaAbs();
+      ieta             =ietaAbs;
+      if (detId0.zside()<0) ieta=-ietaAbs;
+      iphi             = detId0.iphi();
+      if (print_debug_geom){
+	printf("Digis(Trapezoid) [ieta, iphi, eta, phi, r(rmax), layer, index]: %4d %4d %6.2f %6.2f %6.2f ( %6.2f ) %4d %4d\n",
+	       ieta,iphi,global.eta(),double(global.phi()),global.perp(),rout_layer[layer_index]/10.,layer,index);
+	std::cout << detId0  << std::endl;
+      }
+    }
     //KH---
     
     v_eta    -> push_back ( global.eta() );
     v_phi    -> push_back ( global.phi() );
+    if (detid_store){
+    v_ieta   -> push_back ( ieta         );
+    v_iphi   -> push_back ( iphi         );
+    v_cellu  -> push_back ( cellU        );
+    v_cellv  -> push_back ( cellV        );
+    v_waferu -> push_back ( waferU       );
+    v_waferv -> push_back ( waferV       );
+    }
     v_layer  -> push_back ( layer        );
     v_adc    -> push_back ( adc          );
     v_charge -> push_back ( charge       );

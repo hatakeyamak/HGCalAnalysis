@@ -2,16 +2,16 @@
 universe = vanilla
 #
 #--- Only for CMSConnect
-+ProjectName = "cms.org.baylor"
-+DESIRED_Sites="T3_US_Baylor"
-+SingularityImage = "/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel6"
-+REQUIRED_OS = "rhel6"
-+SingularityBindCVMFS = True
-Requirements = HAS_SINGULARITY == True
+#+ProjectName = "cms.org.baylor"
+#+DESIRED_Sites="T3_US_Baylor"
+#+SingularityImage = "/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel6"
+#+REQUIRED_OS = "rhel6"
+#+SingularityBindCVMFS = True
+#Requirements = HAS_SINGULARITY == True
 #--- The section for CMSConnect ends
 #
 #--- Only for local condor submission
-#x509userproxy = $ENV(X509_USER_PROXY)
+x509userproxy = $ENV(X509_USER_PROXY)
 #--- The session for local condor ends
 #
 Executable = cmsRun.csh
@@ -22,5 +22,5 @@ Output = log/condorjob_$(Cluster)_$(Process).stdout
 Error = log/condorjob_$(Cluster)_$(Process).stdout
 Log = log/condorjob_$(Cluster)_$(Process).log
 Arguments = $(Process)
-Queue 38
+Queue 20
 

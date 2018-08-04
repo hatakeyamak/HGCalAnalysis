@@ -52,7 +52,8 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 
   bool debug=false;
   bool debug_geom=true;
-
+  bool detid_store=true;
+  
   //const HGCalDDDConstants   *hgccons_;
   //const HcalDDDRecConstants *hcalcons_;
 
@@ -398,6 +399,14 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	v_index  -> push_back ( index );
 	v_eta    -> push_back ( gcoord.getEta() );
 	v_phi    -> push_back ( gcoord.getPhi() );
+	if (detid_store){
+	  v_ieta   -> push_back ( ieta         );
+	  v_iphi   -> push_back ( iphi         );
+	  v_cellu  -> push_back ( cellU        );
+	  v_cellv  -> push_back ( cellV        );
+	  v_waferu -> push_back ( waferU       );
+	  v_waferv -> push_back ( waferV       );
+	}
 	v_posx   -> push_back ( gcoord.x() );
 	v_posy   -> push_back ( gcoord.y() );
 	v_posz   -> push_back ( gcoord.z() );
@@ -431,6 +440,14 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
     produces<std::vector<int>   > ( m_prefix + "Index"  + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Eta"    + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Phi"    + m_suffix );
+    if (detid_store){
+    produces<std::vector<int> >   ( m_prefix + "IEta"   + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "IPhi"   + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "CellU"  + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "CellV"  + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "WaferU" + m_suffix );
+    produces<std::vector<int> >   ( m_prefix + "WaferV" + m_suffix );
+    }
     produces<std::vector<float> > ( m_prefix + "Posx"   + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Posy"   + m_suffix );
     produces<std::vector<float> > ( m_prefix + "Posz"   + m_suffix );
@@ -444,7 +461,7 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
   std::unique_ptr<std::vector<int>   > v_id;
   std::unique_ptr<std::vector<int>   > v_index; // index for different input collections
   std::unique_ptr<std::vector<int>   > v_subdet;
-
+  
   std::unique_ptr<std::vector<int  > > v_cell; // 
   std::unique_ptr<std::vector<int  > > v_sector; // wafer
   std::unique_ptr<std::vector<int  > > v_subsector; // type
@@ -457,6 +474,13 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
   std::unique_ptr<std::vector<float> > v_eta;
   std::unique_ptr<std::vector<float> > v_phi;
 
+  std::unique_ptr<std::vector<int  > > v_ieta;
+  std::unique_ptr<std::vector<int  > > v_iphi;
+  std::unique_ptr<std::vector<int  > > v_cellu;
+  std::unique_ptr<std::vector<int  > > v_cellv;
+  std::unique_ptr<std::vector<int  > > v_waferu;
+  std::unique_ptr<std::vector<int  > > v_waferv;
+  
  private:
 
   void beginRun(const edm::Run&, const edm::EventSetup& iSetup){
@@ -527,6 +551,14 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
     v_index  = std::unique_ptr<std::vector<int  > > ( new std::vector<int  > ());
     v_eta    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_phi    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
+    if (detid_store){
+    v_ieta   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_iphi   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_cellu  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_cellv  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_waferu = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    v_waferv = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
+    }
     v_posx   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_posy   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_posz   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
@@ -541,6 +573,14 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
     iEvent.put( move(v_index  ), m_prefix + "Index"  + m_suffix );
     iEvent.put( move(v_eta    ), m_prefix + "Eta"    + m_suffix );
     iEvent.put( move(v_phi    ), m_prefix + "Phi"    + m_suffix );
+    if (detid_store){
+    iEvent.put( move(v_ieta   ), m_prefix + "IEta"   + m_suffix );
+    iEvent.put( move(v_iphi   ), m_prefix + "IPhi"   + m_suffix );
+    iEvent.put( move(v_cellu  ), m_prefix + "CellU"  + m_suffix );
+    iEvent.put( move(v_cellv  ), m_prefix + "CellV"  + m_suffix );
+    iEvent.put( move(v_waferu ), m_prefix + "WaferU" + m_suffix );
+    iEvent.put( move(v_waferv ), m_prefix + "WaferV" + m_suffix );
+    }
     iEvent.put( move(v_posx   ), m_prefix + "Posx"   + m_suffix );
     iEvent.put( move(v_posy   ), m_prefix + "Posy"   + m_suffix );
     iEvent.put( move(v_posz   ), m_prefix + "Posz"   + m_suffix );

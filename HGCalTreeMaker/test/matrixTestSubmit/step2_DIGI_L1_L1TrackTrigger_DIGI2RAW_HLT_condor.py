@@ -10,9 +10,10 @@ from Configuration.StandardSequences.Eras import eras
 #KH
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
-options.inputFiles = 'file:step2.root'
+options.inputFiles = 'root://kodiak-se.baylor.edu//store/user/hatake/crab_outputs/TTbar_14TeV/CMSSW_10_3_X_2018-07-30-2300_Step1_v1/180731_232243/0000/step1_1.root'
 options.outputFile = 'file:step3.root'
 options.maxEvents = -1 # -1 means all events
+options.parseArguments()
 #KH
 
 process = cms.Process('HLT',eras.Phase2C4)
@@ -84,7 +85,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     #fileName = cms.untracked.string('file:step2.root'),
-    fileName = cms.untracked.string(option.outputFile),
+    fileName = cms.untracked.string(options.outputFile),
     outputCommands = process.FEVTDEBUGHLTEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )

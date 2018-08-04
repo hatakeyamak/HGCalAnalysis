@@ -275,13 +275,13 @@ void HGCALResponseCheckRun(TString rootfile="../HgcalNtuples_239995_Viktor.root"
   
       // Progress indicator 
       ievent++;
-      if(ievent%10==0) cout << "[HGCAL Response analyzer] Processed " << ievent << " out of " << nentries << " events" << endl; 
+      if(ievent%1==0) cout << "[HGCAL Response analyzer] Processed " << ievent << " out of " << nentries << " events" << endl; 
       if (maxevents>0 && ievent>maxevents) break;
       if (ievent<=skipevents) continue;
       
-      //std::cout << "Simhit size: " << HGCSimHitsEnergy.GetSize() << std::endl;
-      //std::cout << "Digi size:   " << HGCDigiADC.GetSize() << std::endl;
-      //std::cout << "Rechit size: " << HGCRecHitEnergy.GetSize() << std::endl;
+      std::cout << "Simhit size: " << HGCSimHitsEnergy.GetSize() << std::endl;
+      std::cout << "Digi size:   " << HGCDigiADC.GetSize() << std::endl;
+      std::cout << "Rechit size: " << HGCRecHitEnergy.GetSize() << std::endl;
 
       //
       // --- Looping over digis
@@ -444,7 +444,7 @@ void bookHistograms(TList *v_hist)
   sprintf(histo, "Digis_layer_R");
   book2D(v_hist, histo, 55, -0.5, 54.5,100,0.,400.);
   sprintf(histo, "Digis_Z_R");
-  book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
+  book2D(v_hist, histo, 300,250.,550.,100,0.,400.);
 
   sprintf(histo, "Digis_Z_R_CEE");
   book2D(v_hist, histo, 300,250.,550.,100,0.,400.);
@@ -475,7 +475,7 @@ void bookHistograms(TList *v_hist)
   sprintf(histo, "Simhits_layer_R");
   book2D(v_hist, histo, 55, -0.5, 54.5,100,0.,400.);
   sprintf(histo, "Simhits_Z_R");
-  book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
+  book2D(v_hist, histo, 300,250.,550.,100,0.,400.);
 
   sprintf(histo, "Simhits_Z_R_CEE");
   book2D(v_hist, histo, 300,250.,550.,100,0.,400.);
@@ -490,6 +490,10 @@ void bookHistograms(TList *v_hist)
   book2D(v_hist, histo, 400,-400.,400.,400,-400.,400.);
   sprintf(histo, "Simhits_XY_CEHB");
   book2D(v_hist, histo, 400,-400.,400.,400,-400.,400.);
+  sprintf(histo, "Simhits_RPhi_CEHB1");
+  book2D(v_hist, histo, 400,0.,400.,288,-1.*TMath::Pi(),TMath::Pi());
+  sprintf(histo, "Simhits_RPhi_CEHB2");
+  book2D(v_hist, histo, 400,0.,400.,360,-1.*TMath::Pi(),TMath::Pi());
 
   for (int ilayer=1; ilayer<=28; ilayer++){
     sprintf(histo, "Simhits_XY_CEE_layer%d",ilayer);
@@ -506,7 +510,7 @@ void bookHistograms(TList *v_hist)
   sprintf(histo, "Rechits_layer_R");
   book2D(v_hist, histo, 55, -0.5, 54.5,100,0.,400.);
   sprintf(histo, "Rechits_Z_R");
-  book2D(v_hist, histo, 100,250.,550.,100,0.,400.);
+  book2D(v_hist, histo, 300,250.,550.,100,0.,400.);
 
   sprintf(histo, "Rechits_Z_R_CEE");
   book2D(v_hist, histo, 300,250.,550.,100,0.,400.);

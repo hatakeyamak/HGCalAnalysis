@@ -2,31 +2,10 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step3 --conditions auto:phase2_realistic -n 10 --era Phase2C4 --eventcontent FEVTDEBUGHLT,MINIAODSIM,DQM --runUnscheduled -s RAW2DIGI,L1Reco,RECO,RECOSIM,PAT,VALIDATION:@phase2Validation+@miniAODValidation,DQM:@phase2+@miniAODDQM --datatier GEN-SIM-RECO,MINIAODSIM,DQMIO --geometry Extended2023D28 --filein file:step2.root --fileout file:step3.root --outputCommands keep *_HGCalUncalibRecHit_*_*,keep *_HGCDigis*_*_* --no_exec
+# with command line options: step3 --conditions auto:phase2_realistic -n 10 --era Phase2C4 --eventcontent FEVTDEBUGHLT,MINIAODSIM --runUnscheduled -s RAW2DIGI,L1Reco,RECO,RECOSIM,PAT --datatier GEN-SIM-RECO,MINIAODSIM --geometry Extended2023D28 --no_exec --filein file:step2.root --fileout file:step3.root --outputCommands keep *_HGCalUncalibRecHit_*_*,keep *_HGCDigis*_*_*,keep *_hgcalDigis*_*_*
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
-
-#KH
-import FWCore.ParameterSet.VarParsing as VarParsing
-options = VarParsing.VarParsing ('analysis')
-options.register('outputMINIAOD',
-                 "file:step3_inMINIAODSIM.root",
-                 VarParsing.VarParsing.multiplicity.singleton,
-                 VarParsing.VarParsing.varType.string,
-                 "name for the output root file (\"file:step3_inMINIAODSIM.root\" is default)")
-options.register('outputDQM',
-                 "file:step3_inDQM.root",
-                 VarParsing.VarParsing.multiplicity.singleton,
-                 VarParsing.VarParsing.varType.string,
-                 "name for the output root file (\"file:step3_inDQM.root\" is default)")
-options.inputFiles = 'file:step2.root'
-options.outputFile = 'file:step3.root'
-options.outputDQM = 'file:step3_inDQM.root'
-options.outputMINIAOD = 'file:step3_inMINIAOD.root'
-options.maxEvents = -1 # -1 means all events
-options.parseArguments()
-#KH
 
 process = cms.Process('RECO',eras.Phase2C4)
 
@@ -44,19 +23,16 @@ process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.RecoSim_cff')
 process.load('PhysicsTools.PatAlgos.slimming.metFilterPaths_cff')
 process.load('Configuration.StandardSequences.PATMC_cff')
-process.load('Configuration.StandardSequences.Validation_cff')
-process.load('DQMOffline.Configuration.DQMOfflineMC_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    #input = cms.untracked.int32(10)
-    input = cms.untracked.int32(options.maxEvents)
+    input = cms.untracked.int32(10)
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
-    #fileNames = cms.untracked.vstring('file:step2.root'),
-    fileNames = cms.untracked.vstring(options.inputFiles),
+    fileNames = cms.untracked.vstring('file:step2.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -78,8 +54,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-RECO'),
         filterName = cms.untracked.string('')
     ),
-    #fileName = cms.untracked.string('file:step3.root'),
-    fileName = cms.untracked.string(options.outputFile),
+    fileName = cms.untracked.string('file:step3.root'),
     outputCommands = process.FEVTDEBUGHLTEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -94,8 +69,7 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     dropMetaData = cms.untracked.string('ALL'),
     eventAutoFlushCompressedSize = cms.untracked.int32(-900),
     fastCloning = cms.untracked.bool(False),
-    #fileName = cms.untracked.string('file:step3_inMINIAODSIM.root'),
-    fileName = cms.untracked.string(options.outputMINIAOD),
+    fileName = cms.untracked.string('file:step3_inMINIAODSIM.root'),
     outputCommands = process.MINIAODSIMEventContent.outputCommands,
     overrideBranchesSplitLevel = cms.untracked.VPSet(
         cms.untracked.PSet(
@@ -151,24 +125,9 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0)
 )
 
-process.DQMoutput = cms.OutputModule("DQMRootOutputModule",
-    dataset = cms.untracked.PSet(
-        dataTier = cms.untracked.string('DQMIO'),
-        filterName = cms.untracked.string('')
-    ),
-    #fileName = cms.untracked.string('file:step3_inDQM.root'),
-    fileName = cms.untracked.string(options.outputDQM),
-    outputCommands = process.DQMEventContent.outputCommands,
-    splitLevel = cms.untracked.int32(0)
-)
-
 # Additional output definition
 
 # Other statements
-process.mix.playback = True
-process.mix.digitizers = cms.PSet()
-for a in process.aliases: delattr(process, a)
-process.RandomNumberGeneratorService.restoreStateLabel=cms.untracked.string("randomEngineStateProducer")
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic', '')
 process.FEVTDEBUGHLToutput.outputCommands.append('keep *_HGCalUncalibRecHit_*_*')
@@ -210,50 +169,16 @@ process.Flag_trkPOG_manystripclus53X = cms.Path()
 process.Flag_BadPFMuonSummer16Filter = cms.Path(process.BadPFMuonSummer16Filter)
 process.Flag_muonBadTrackFilter = cms.Path(process.muonBadTrackFilter)
 process.Flag_CSCTightHalo2015Filter = cms.Path(process.CSCTightHalo2015Filter)
-process.prevalidation_step = cms.Path(process.baseCommonPreValidation)
-process.prevalidation_step1 = cms.Path(process.globalPrevalidationTracking)
-process.prevalidation_step2 = cms.Path(process.globalPrevalidationMuons)
-process.prevalidation_step3 = cms.Path(process.globalPrevalidationJetMETOnly)
-process.prevalidation_step4 = cms.Path(process.prebTagSequenceMC)
-process.prevalidation_step5 = cms.Path(process.globalPrevalidationHCAL)
-process.prevalidation_step6 = cms.Path(process.prevalidationMiniAOD)
-process.validation_step = cms.EndPath(process.baseCommonValidation)
-process.validation_step1 = cms.EndPath(process.globalValidationTrackingOnly)
-process.validation_step2 = cms.EndPath(process.globalValidationMuons)
-process.validation_step3 = cms.EndPath(process.globalValidationJetMETonly)
-process.validation_step4 = cms.EndPath(process.bTagPlotsMCbcl)
-process.validation_step5 = cms.EndPath(process.globalValidationHCAL)
-process.validation_step6 = cms.EndPath(process.globalValidationHGCal)
-process.validation_step7 = cms.EndPath(process.globalValidationOuterTracker)
-process.validation_step8 = cms.EndPath(process.validationMiniAOD)
-process.dqmoffline_step = cms.EndPath(process.DQMOfflineTracking)
-process.dqmoffline_1_step = cms.EndPath(process.DQMOuterTracker)
-process.dqmoffline_2_step = cms.EndPath(process.DQMOfflineMuon)
-process.dqmoffline_3_step = cms.EndPath(process.DQMOfflineHcal)
-process.dqmoffline_4_step = cms.EndPath(process.HcalDQMOfflineSequence)
-process.dqmoffline_5_step = cms.EndPath(process.DQMOfflineEGamma)
-process.dqmoffline_6_step = cms.EndPath(process.DQMOfflineMiniAOD)
-process.dqmofflineOnPAT_step = cms.EndPath(process.PostDQMOffline)
-process.dqmofflineOnPAT_1_step = cms.EndPath(process.PostDQMOfflineMiniAOD)
+process.endjob_step = cms.EndPath(process.endOfProcess)
 process.FEVTDEBUGHLToutput_step = cms.EndPath(process.FEVTDEBUGHLToutput)
 process.MINIAODSIMoutput_step = cms.EndPath(process.MINIAODSIMoutput)
-process.DQMoutput_step = cms.EndPath(process.DQMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.recosim_step,process.Flag_HBHENoiseFilter,process.Flag_HBHENoiseIsoFilter,process.Flag_CSCTightHaloFilter,process.Flag_CSCTightHaloTrkMuUnvetoFilter,process.Flag_CSCTightHalo2015Filter,process.Flag_globalTightHalo2016Filter,process.Flag_globalSuperTightHalo2016Filter,process.Flag_HcalStripHaloFilter,process.Flag_hcalLaserEventFilter,process.Flag_EcalDeadCellTriggerPrimitiveFilter,process.Flag_EcalDeadCellBoundaryEnergyFilter,process.Flag_ecalBadCalibFilter,process.Flag_goodVertices,process.Flag_eeBadScFilter,process.Flag_ecalLaserCorrFilter,process.Flag_trkPOGFilters,process.Flag_chargedHadronTrackResolutionFilter,process.Flag_muonBadTrackFilter,process.Flag_BadChargedCandidateFilter,process.Flag_BadPFMuonFilter,process.Flag_BadChargedCandidateSummer16Filter,process.Flag_BadPFMuonSummer16Filter,process.Flag_trkPOG_manystripclus53X,process.Flag_trkPOG_toomanystripclus53X,process.Flag_trkPOG_logErrorTooManyClusters,process.Flag_METFilters,process.prevalidation_step,process.prevalidation_step1,process.prevalidation_step2,process.prevalidation_step3,process.prevalidation_step4,process.prevalidation_step5,process.prevalidation_step6,process.validation_step,process.validation_step1,process.validation_step2,process.validation_step3,process.validation_step4,process.validation_step5,process.validation_step6,process.validation_step7,process.validation_step8,process.dqmoffline_step,process.dqmoffline_1_step,process.dqmoffline_2_step,process.dqmoffline_3_step,process.dqmoffline_4_step,process.dqmoffline_5_step,process.dqmoffline_6_step,process.dqmofflineOnPAT_step,process.dqmofflineOnPAT_1_step,process.FEVTDEBUGHLToutput_step,process.MINIAODSIMoutput_step,process.DQMoutput_step)
+process.schedule = cms.Schedule(process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.recosim_step,process.Flag_HBHENoiseFilter,process.Flag_HBHENoiseIsoFilter,process.Flag_CSCTightHaloFilter,process.Flag_CSCTightHaloTrkMuUnvetoFilter,process.Flag_CSCTightHalo2015Filter,process.Flag_globalTightHalo2016Filter,process.Flag_globalSuperTightHalo2016Filter,process.Flag_HcalStripHaloFilter,process.Flag_hcalLaserEventFilter,process.Flag_EcalDeadCellTriggerPrimitiveFilter,process.Flag_EcalDeadCellBoundaryEnergyFilter,process.Flag_ecalBadCalibFilter,process.Flag_goodVertices,process.Flag_eeBadScFilter,process.Flag_ecalLaserCorrFilter,process.Flag_trkPOGFilters,process.Flag_chargedHadronTrackResolutionFilter,process.Flag_muonBadTrackFilter,process.Flag_BadChargedCandidateFilter,process.Flag_BadPFMuonFilter,process.Flag_BadChargedCandidateSummer16Filter,process.Flag_BadPFMuonSummer16Filter,process.Flag_trkPOG_manystripclus53X,process.Flag_trkPOG_toomanystripclus53X,process.Flag_trkPOG_logErrorTooManyClusters,process.Flag_METFilters,process.endjob_step,process.FEVTDEBUGHLToutput_step,process.MINIAODSIMoutput_step)
 process.schedule.associate(process.patTask)
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 
-# customisation of the process.
-
-# Automatic addition of the customisation function from SimGeneral.MixingModule.fullMixCustomize_cff
-from SimGeneral.MixingModule.fullMixCustomize_cff import setCrossingFrameOn 
-
-#call to customisation function setCrossingFrameOn imported from SimGeneral.MixingModule.fullMixCustomize_cff
-process = setCrossingFrameOn(process)
-
-# End of customisation functions
 #do not add changes to your config after this point (unless you know what you are doing)
 from FWCore.ParameterSet.Utilities import convertToUnscheduled
 process=convertToUnscheduled(process)
