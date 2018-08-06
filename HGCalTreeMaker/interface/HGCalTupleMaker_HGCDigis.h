@@ -341,6 +341,13 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   std::unique_ptr<std::vector<float> > v_posz;
   std::unique_ptr<std::vector<int>   > v_index;
 
+  std::unique_ptr<std::vector<int> > v_ieta;
+  std::unique_ptr<std::vector<int> > v_iphi;
+  std::unique_ptr<std::vector<int> > v_cellu;
+  std::unique_ptr<std::vector<int> > v_cellv;
+  std::unique_ptr<std::vector<int> > v_waferu;
+  std::unique_ptr<std::vector<int> > v_waferv;
+  
   void beginRun(const edm::Run&, const edm::EventSetup& iSetup){
 
     //initiating HGC Geometry

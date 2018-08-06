@@ -551,14 +551,14 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
     v_index  = std::unique_ptr<std::vector<int  > > ( new std::vector<int  > ());
     v_eta    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_phi    = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
-    if (detid_store){
+    //if (detid_store){
     v_ieta   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
     v_iphi   = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
     v_cellu  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
     v_cellv  = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
     v_waferu = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
     v_waferv = std::unique_ptr<std::vector<int> > ( new std::vector<int> ());
-    }
+    //}
     v_posx   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_posy   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
     v_posz   = std::unique_ptr<std::vector<float> > ( new std::vector<float> ());
