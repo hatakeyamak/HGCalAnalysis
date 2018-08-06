@@ -61,7 +61,7 @@ class HGCalTupleMaker_HGCDigis : public edm::EDProducer {
   int SampleIndx;
   
   bool debug=false;
-  bool debug_geom=true;
+  bool debug_geom=false;
   bool detid_store=true;
   
   //HGC Geometry                                                                                                     

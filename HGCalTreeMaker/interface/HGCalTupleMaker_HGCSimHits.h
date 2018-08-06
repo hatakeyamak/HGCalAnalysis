@@ -51,7 +51,7 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
   const std::string     m_suffix;
 
   bool debug=false;
-  bool debug_geom=true;
+  bool debug_geom=false;
   bool detid_store=true;
   
   //const HGCalDDDConstants   *hgccons_;
