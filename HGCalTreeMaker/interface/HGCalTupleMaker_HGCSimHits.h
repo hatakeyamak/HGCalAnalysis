@@ -140,62 +140,18 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	if (nameDetector_ == "HCal") {
 
 	  //
-	  // Direct HcalTestNumbering method:
-	  // - Validation/HGCalValidation/plugins/HGCalHitValidation.cc
-          // - Validation/HGCalValidation/plugins/HGCGeometryValidation.cc
-	  //
-
-	  /*
-	  int z, depth, eta, phi, lay;
-	  HcalTestNumbering::unpackHcalIndex(it.id(), subdet, z, depth, eta, phi, lay);
-	  if (subdet != static_cast<int>(HcalEndcap)) continue;
-
-	  HcalCellType::HcalCell hccell = hcCons_->cell(subdet, z, lay, eta, phi);
-	  //double zp  = hccell.rz/10*tanh(hccell.eta);  // mm -> cm
-	  double zp  = hccell.rz/10;  // mm -> cm, rz is actually Z?
-	  int sign = (z==0)?(-1):(1);
-	  zp      *= sign;
-	  double rho = zp*tan(2.0*atan(exp(-hccell.eta)));
-	  double xp  = rho * cos(hccell.phi); //cm
-	  double yp  = rho * sin(hccell.phi); //cm
-	  */
-
-	  //
 	  // HcalHitRelabeller method:
 	  // - Validation/HGCalValidation/plugins/HGCalSimHitValidation.cc
 	  //
 	  HcalDetId detId = HcalHitRelabeller::relabel(id_,hcConr_);
 	  subdet           = detId.subdet();
 
-	  /*
-	  if (subdet != static_cast<int>(HcalEndcap)) continue;
-	  cell             = detId.ietaAbs();
-	  sector           = detId.iphi();
-	  subsector        = 1;
-	  layer            = detId.depth();
-	  zside            = detId.zside();
-	  */
-
 	  if (debug) std::cout << it.energy() << " " << subdet << std::endl;
 
-	  if (it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
+	  if (debug && it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
 					 << it.energy() << " " 
 					 << nameDetector_ << " " 
 					 << subdet << " " << cell << " " << sector << std::endl;
-
-	  //KH std::pair<double,double> etaphi = hcConr_->getEtaPhi(subdet,zside*cell,sector);
-	  //KH double rz = hcConr_->getRZ(subdet,zside*cell,layer);	  // This is actually Z?
-	  
-	  /*
-	  gcoord = HepGeom::Point3D<float>(rz*cos(etaphi.second)/cosh(etaphi.first),
-					   rz*sin(etaphi.second)/cosh(etaphi.first),
-					   rz*tanh(etaphi.first));
-	  */
-	  /*
-	  gcoord = HepGeom::Point3D<float>(rz*cos(etaphi.second)/cosh(etaphi.first)/tanh(etaphi.first),
-					   rz*sin(etaphi.second)/cosh(etaphi.first)/tanh(etaphi.first),
-					   rz);
-	  */
 
 	  //
 	  // Use CaloCellGeometry getPosition
@@ -208,17 +164,6 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	  iSetup.get<CaloGeometryRecord>().get (geometry);
 	  auto cellGeometry = geometry->getSubdetectorGeometry(detId)->getGeometry(detId);	  
 	  
-	  if (debug) 
-	  std::cout << "HCAL geom comparison: "
-	    /*
-		    << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
-		    << rho << " "
-		    << "(" << gcoord.x() << ", " << gcoord.y() << ", " << gcoord.z() << ") "  
-	    */
-		    << "(" << cellGeometry->getPosition().x() << ", " << cellGeometry->getPosition().y() << ", " << cellGeometry->getPosition().z() << ") "  
-		    << std::endl;
-
-
 	  //
 	  // Use CaloCellGeometry getPosition() method at the end
 	  // 
@@ -226,27 +171,28 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 					   cellGeometry->getPosition().y(),
 					   cellGeometry->getPosition().z());
 
-	  /*
-	  //if (debug)
+	  if (debug) 
 	  std::cout << "HCAL geom comparison: "
-		  << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
-		  << "(" << gcoord.x() << ", " << gcoord.y() << ", " << gcoord.z() << ") "  
-		  << std::endl;
-	  */
+	    /*
+		    << "(" << xp         << ", " << yp         << ", " << zp         << ") "  
+		    << rho << " "
+	    */
+		    << "(" << gcoord.x() << ", " << gcoord.y() << ", " << gcoord.z() << ") "  
+		    << "(" << cellGeometry->getPosition().x() << ", " << cellGeometry->getPosition().y() << ", " << cellGeometry->getPosition().z() << ") "  
+		    << std::endl;
 
 	} else {
+
 	  //
 	  // HGCAL geometry, not relying on HCAL
 	  //
 	  
-	  //debug = true;
 	  if (debug && it.energy()>0.5) std::cout << "HGCalTupleMaker_HGCSimHits: " 
 					 << it.energy() << " " 
 					 << nameDetector_ << " " 
 					 << subdet << " " << cell << " " << sector << std::endl;
 	  
 	  if (debug) std::cout << "HGCalTupleMaker_HGCSimHits: " << hgcCons_[index]->geomMode() << std::endl;
-	  //debug = false;
 
 	  //
 	  // Square
@@ -270,10 +216,26 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
 	    std::pair<float,float> xy;
 
 	    //
+	    // HF nose
+	    //
+	    if (m_geometrySource[index]=="HGCalHFNoseSensitive") {
+	      HFNoseDetId detId = HFNoseDetId(id_);
+	      subdet   = detId.subdetId();
+	      cellU    = detId.cellU();
+	      cellV    = detId.cellV();
+	      waferU   = detId.waferU();
+	      waferV   = detId.waferV();
+	      type     = detId.type();
+	      layer    = detId.layer();
+	      zside    = detId.zside();
+	      xy       = hgcCons_[index]->locateCell(layer,waferU,waferV,cellU,cellV,
+						 false,true);	    
+	    //
 	    // Hexagons
 	    //
-	    if ((hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8) ||
-		(hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8Full)) {
+	    } else if
+	      ((hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8) ||
+	       (hgcCons_[index]->geomMode() == HGCalGeometryMode::Hexagon8Full)) {
 
 	      HGCSiliconDetId detId = HGCSiliconDetId(id_);
 	      subdet           = ForwardEmpty;
