@@ -54,9 +54,6 @@ class HGCalTupleMaker_HGCSimHits : public edm::EDProducer {
   bool debug_geom=false;
   bool detid_store=true;
   
-  //const HGCalDDDConstants   *hgccons_;
-  //const HcalDDDRecConstants *hcalcons_;
-
   //HGC Geometry                                                                                                     
   std::vector<const HGCalDDDConstants*> hgcCons_;
   std::vector<const HGCalGeometry*>     hgcGeometry_;
