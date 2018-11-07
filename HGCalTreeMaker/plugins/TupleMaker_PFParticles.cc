@@ -1,9 +1,9 @@
-#include "HGCalAnalysis/HGCalTreeMaker/interface/HGCalTupleMaker_PFCandidates.h"
+#include "HGCalAnalysis/HGCalTreeMaker/interface/TupleMaker_PFCandidates.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Common/interface/View.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 
-HGCalTupleMaker_PFCandidates::HGCalTupleMaker_PFCandidates(const edm::ParameterSet& iConfig):
+TupleMaker_PFCandidates::TupleMaker_PFCandidates(const edm::ParameterSet& iConfig):
   inputTag    (iConfig.getUntrackedParameter<edm::InputTag>("source")),
   prefix      (iConfig.getUntrackedParameter<std::string>  ("Prefix")),
   suffix      (iConfig.getUntrackedParameter<std::string>  ("Suffix")),
@@ -41,7 +41,7 @@ HGCalTupleMaker_PFCandidates::HGCalTupleMaker_PFCandidates(const edm::ParameterS
   
 }
 
-void HGCalTupleMaker_PFCandidates::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
+void TupleMaker_PFCandidates::produce(edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   std::unique_ptr<std::vector<double> >            pt                ( new std::vector<double>           ());
   std::unique_ptr<std::vector<double> >            eta               ( new std::vector<double>           ());

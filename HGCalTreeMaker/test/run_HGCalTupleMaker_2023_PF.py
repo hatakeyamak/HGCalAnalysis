@@ -115,7 +115,7 @@ process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_RecoTracks_cfi")
 
 process.load("Validation.HGCalValidation.hgcalHitValidation_cfi")
 
-process.load("HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_PFCandidates_cfi")
+process.load("HGCalAnalysis.HGCalTreeMaker.TupleMaker_PFCandidates_cfi")
 
 #------------------------------------------------------------------------------------
 # Specify Global Tag
@@ -132,7 +132,7 @@ process.tuple_step = cms.Sequence(
     process.hgcalTupleEvent*
     # Make HCAL tuples: digi info
     #
-    process.hgcalTuplePFCandidates*
+    process.tuplePFCandidates*
     #
     process.hgcalTupleHBHERecHits*
     process.hgcalTupleHGCRecHits*

@@ -1,5 +1,5 @@
-#ifndef HGCalTupleMaker_PFCandidates_h
-#define HGCalTupleMaker_PFCandidates_h
+#ifndef TupleMaker_PFCandidates_h
+#define TupleMaker_PFCandidates_h
 
 #include "FWCore/Framework/interface/EDProducer.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
@@ -21,9 +21,9 @@
 #include "DataFormats/GsfTrackReco/interface/GsfTrack.h"
 #include "DataFormats/GsfTrackReco/interface/GsfTrackFwd.h"
 
-class HGCalTupleMaker_PFCandidates : public edm::EDProducer {
+class TupleMaker_PFCandidates : public edm::EDProducer {
  public:
-  explicit HGCalTupleMaker_PFCandidates(const edm::ParameterSet&);
+  explicit TupleMaker_PFCandidates(const edm::ParameterSet&);
 
  private:
   void produce( edm::Event &, const edm::EventSetup & );
