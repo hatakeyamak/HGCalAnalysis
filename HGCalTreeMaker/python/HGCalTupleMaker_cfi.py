@@ -7,3 +7,4 @@ from HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HORecHits_cfi             impo
 from HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HFRecHits_cfi             import * 
 from HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCRecHits_cfi            import *
 from HGCalAnalysis.HGCalTreeMaker.HGCalTupleMaker_HGCSimHits_cfi            import *
+from HGCalAnalysis.HGCalTreeMaker.TupleMaker_PFCandidates_cfi               import *
