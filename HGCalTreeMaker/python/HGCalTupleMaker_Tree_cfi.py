@@ -14,7 +14,9 @@ hgcalTupleTree = cms.EDAnalyzer("HGCalTupleMaker_Tree",
         'keep *_hgcalTupleHGC*SimHits_*_*',
         'keep *_hgcalTupleGenParticles_*_*',
         'keep *_hgcalTupleSimTracks_*_*',
-        'keep *_hgcalTupleGeneralTracks_*_*'
+        'keep *_hgcalTupleGeneralTracks_*_*',
+        'keep *_hgcalTuple*_*_*',
+        'keep *_tuple*_*_*'
     )
 
 )             
